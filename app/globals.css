@@ -1,0 +1,74 @@
+@import "tailwindcss";
+
+@theme {
+  --color-navy-950: #07142a;
+  --color-navy-900: #0b1f3a;
+  --color-navy-800: #10294c;
+  --color-navy-700: #1a3a66;
+
+  --color-charcoal-900: #171b20;
+  --color-charcoal-800: #1f242b;
+  --color-charcoal-700: #2b323a;
+
+  --color-steel-50: #f7f8fa;
+  --color-steel-100: #f0f2f5;
+  --color-steel-200: #e1e5ea;
+  --color-steel-300: #c9d0d8;
+  --color-steel-400: #9aa5b1;
+  --color-steel-500: #6b7785;
+  --color-steel-600: #4f5b69;
+
+  --color-accent: #f26a1b;
+  --color-accent-strong: #c2410c;
+
+  --font-sans: var(--font-body), system-ui, sans-serif;
+  --font-display: var(--font-heading), var(--font-body), system-ui, sans-serif;
+
+  /* Flat, square design language: every radius token resolves to zero. */
+  --radius-xs: 0;
+  --radius-sm: 0;
+  --radius-md: 0;
+  --radius-lg: 0;
+  --radius-xl: 0;
+  --radius-2xl: 0;
+  --radius-3xl: 0;
+  --radius-4xl: 0;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background: #ffffff;
+    color: var(--color-charcoal-800);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    letter-spacing: -0.01em;
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-accent);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background: var(--color-accent);
+    color: var(--color-navy-950);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
