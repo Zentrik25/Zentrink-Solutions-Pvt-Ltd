@@ -26,7 +26,7 @@ jobs:
         run: npx tsx scripts/migration-guard.ts
       - name: Pre-migration backup (verified readable)
         run: ./scripts/backup.sh backups
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with: { name: pre-migration-backup, path: backups/, retention-days: 7 }
       - name: Apply migrations
         run: npx prisma migrate deploy
