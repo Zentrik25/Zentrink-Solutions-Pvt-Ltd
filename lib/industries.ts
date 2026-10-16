@@ -1,4 +1,5 @@
 export type Industry = {
+  seo?: { title?: string; description?: string };
   slug: string;
   title: string;
   summary: string;

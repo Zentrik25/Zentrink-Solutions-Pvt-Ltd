@@ -25,6 +25,7 @@ export type ProjectImage = {
 };
 
 export type Project = {
+  seo?: { title?: string; description?: string };
   slug: string;
   title: string;
   category: ProjectCategory;

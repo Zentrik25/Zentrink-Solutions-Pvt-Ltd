@@ -1,3 +1,4 @@
+/** Seed categories; live categories come from the database. */
 export const ARTICLE_CATEGORIES = [
   "Solar Energy",
   "Power Systems",
@@ -6,7 +7,7 @@ export const ARTICLE_CATEGORIES = [
   "Procurement",
 ] as const;
 
-export type ArticleCategory = (typeof ARTICLE_CATEGORIES)[number];
+export type ArticleCategory = string;
 
 export type Block =
   | { type: "h2"; text: string }
@@ -14,6 +15,7 @@ export type Block =
   | { type: "ul"; items: string[] };
 
 export type Article = {
+  seo?: { title?: string; description?: string };
   slug: string;
   title: string;
   excerpt: string;

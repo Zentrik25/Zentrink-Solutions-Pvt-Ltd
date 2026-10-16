@@ -1,10 +1,17 @@
 import { Mail, MapPin, Phone } from "lucide-react";
-import { SITE } from "@/lib/site";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import Image from "next/image";
 
-export function Hero() {
+export function Hero({
+  headline,
+  text,
+  contact,
+}: {
+  headline: string;
+  text: string;
+  contact: { phone: string; phoneHref: string; email: string };
+}) {
   return (
     <section className="bg-navy-900 text-white">
       <Container className="grid items-center gap-12 py-16 lg:grid-cols-[1.25fr_1fr] lg:gap-16 lg:py-24">
@@ -14,12 +21,9 @@ export function Hero() {
             Electrical engineering &middot; Zimbabwe
           </p>
           <h1 className="text-[2.4rem] font-black uppercase leading-[0.98] sm:text-6xl lg:text-7xl">
-            Engineering reliable power solutions.
+            {headline}
           </h1>
-          <p className="mt-8 max-w-xl text-lg leading-relaxed text-steel-300">
-            Professional electrical engineering, power distribution, solar energy and
-            industrial electrical solutions for projects across Zimbabwe.
-          </p>
+          <p className="mt-8 max-w-xl text-lg leading-relaxed text-steel-300">{text}</p>
           <div className="mt-10 flex flex-col gap-4 sm:flex-row">
             <ButtonLink href="/request-a-quote">Request a Project Quote</ButtonLink>
             <ButtonLink href="/services" variant="outline-light">
@@ -44,22 +48,22 @@ export function Hero() {
       <div className="border-t border-navy-700">
         <Container className="grid gap-px text-sm sm:grid-cols-3">
           <a
-            href={SITE.phoneHref}
+            href={contact.phoneHref}
             className="flex items-center gap-3 py-5 text-steel-300 hover:text-white"
           >
             <Phone aria-hidden className="size-4 text-accent" />
-            {SITE.phone}
+            {contact.phone}
           </a>
           <a
-            href={`mailto:${SITE.email}`}
+            href={`mailto:${contact.email}`}
             className="flex items-center gap-3 py-5 text-steel-300 hover:text-white"
           >
             <Mail aria-hidden className="size-4 text-accent" />
-            {SITE.email}
+            {contact.email}
           </a>
           <p className="flex items-center gap-3 py-5 text-steel-300">
             <MapPin aria-hidden className="size-4 text-accent" />
-            Projects across {SITE.country}
+            Projects across Zimbabwe
           </p>
         </Container>
       </div>

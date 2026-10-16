@@ -1,10 +1,11 @@
+import { SiteChrome } from "@/components/layout/site-chrome";
 import { PageHero } from "@/components/ui/page-hero";
 import { Section } from "@/components/ui/section";
 import { ButtonLink } from "@/components/ui/button";
 
 export default function NotFound() {
   return (
-    <>
+    <SiteChrome>
       <PageHero
         eyebrow="Error 404"
         title="Page not found"
@@ -21,6 +22,6 @@ export default function NotFound() {
           </ButtonLink>
         </div>
       </Section>
-    </>
+    </SiteChrome>
   );
 }

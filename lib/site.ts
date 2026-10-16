@@ -12,8 +12,8 @@ export const SITE = {
   country: "Zimbabwe",
 } as const;
 
-export function whatsappLink(message?: string): string {
-  const base = `https://wa.me/${SITE.whatsappNumber}`;
+export function whatsappLink(message?: string, number: string = SITE.whatsappNumber): string {
+  const base = `https://wa.me/${number}`;
   return message ? `${base}?text=${encodeURIComponent(message)}` : base;
 }
 

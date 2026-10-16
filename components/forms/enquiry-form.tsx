@@ -1,21 +1,19 @@
 "use client";
 
-import { useActionState } from "react";
-import { MessageCircle } from "lucide-react";
-import { submitEnquiry } from "@/app/contact/actions";
-import {
-  SERVICE_OPTIONS,
-  TIMELINE_OPTIONS,
-  emptyValues,
-  type EnquiryField,
-  type EnquiryState,
-} from "@/lib/enquiry";
-import { SITE, whatsappLink } from "@/lib/site";
-import { SubmitButton, ExternalButton } from "@/components/ui/button";
+import { useActionState, useEffect, useRef, useState } from "react";
+import { CheckCircle2, Paperclip } from "lucide-react";
+import { submitEnquiryAction } from "@/lib/enquiry/actions";
+import { BUDGET_OPTIONS, type ServiceOption } from "@/lib/enquiry/constants";
+import type { EnquiryActionState, EnquiryFieldName } from "@/lib/enquiry/schema";
+import { SubmitButton } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 
 const inputClass =
   "w-full border-2 border-steel-300 bg-white px-4 py-3 text-base text-charcoal-800 placeholder:text-steel-500 focus:border-navy-900 focus:outline-none aria-[invalid=true]:border-red-700";
+
+const MAX_FILES = 3;
+const MAX_FILE = 3 * 1024 * 1024;
+const MAX_TOTAL = 4 * 1024 * 1024;
 
 function Field({
   id,
@@ -25,7 +23,7 @@ function Field({
   hint,
   children,
 }: {
-  id: EnquiryField;
+  id: string;
   label: string;
   required?: boolean;
   error?: string;
@@ -55,115 +53,107 @@ function Field({
   );
 }
 
-export function EnquiryForm({ defaultService = "" }: { defaultService?: string }) {
-  const initial: EnquiryState = {
-    status: "idle",
-    values: emptyValues(defaultService),
-    errors: {},
-  };
-  const [state, action, pending] = useActionState(submitEnquiry, initial);
-  const { values, errors } = state;
+export function EnquiryForm({
+  serviceOptions,
+  defaultService = "",
+}: {
+  serviceOptions: ServiceOption[];
+  defaultService?: string;
+}) {
+  const initial: EnquiryActionState = { status: "idle", values: { service: defaultService }, errors: {} };
+  const [state, action, pending] = useActionState(submitEnquiryAction, initial);
+  const [token, setToken] = useState("");
+  const [fileError, setFileError] = useState("");
+  const formRef = useRef<HTMLFormElement>(null);
+  const values = state.values;
+  const errors = state.errors;
 
-  const common = (id: EnquiryField) => ({
+  // A fresh signed timestamp is fetched on load and after every failed attempt,
+  // so cached pages never carry a stale token.
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/form-token", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((d: { token: string }) => !cancelled && setToken(d.token))
+      .catch(() => undefined);
+    return () => {
+      cancelled = true;
+    };
+  }, [state]);
+
+  const common = (id: EnquiryFieldName) => ({
     id,
     name: id,
     "aria-invalid": errors[id] ? true : undefined,
     "aria-describedby": errors[id] ? `${id}-error` : undefined,
   });
 
+  function onFiles(e: React.ChangeEvent<HTMLInputElement>) {
+    const files = Array.from(e.target.files ?? []);
+    const total = files.reduce((n, f) => n + f.size, 0);
+    let msg = "";
+    if (files.length > MAX_FILES) msg = `Attach at most ${MAX_FILES} files.`;
+    else if (files.some((f) => f.size > MAX_FILE)) msg = "Each file must be 3 MB or smaller.";
+    else if (total > MAX_TOTAL) msg = "Attachments must total 4 MB or less.";
+    setFileError(msg);
+    if (msg) e.target.value = "";
+  }
+
+  if (state.status === "success") {
+    return (
+      <div role="status" className="border-l-4 border-accent bg-steel-100 p-8">
+        <CheckCircle2 aria-hidden className="size-8 text-accent-strong" />
+        <h3 className="mt-4 text-2xl font-extrabold uppercase text-navy-900">Enquiry received</h3>
+        <p className="mt-3 text-lg text-charcoal-800">
+          Your reference number is{" "}
+          <strong className="font-display text-xl text-navy-900">{state.reference}</strong>.
+        </p>
+        <p className="mt-3 leading-relaxed text-charcoal-700">
+          Your enquiry has been saved and our team has been notified. We will also send a confirmation
+          email to the address you gave; if it does not arrive within a few minutes, check your spam
+          folder. Quote this reference in any correspondence.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <form action={action} className="space-y-6" aria-label="Project enquiry form">
-      {state.status === "invalid" && Object.keys(errors).length > 0 && (
+    <form ref={formRef} action={action} className="space-y-6" aria-label="Project enquiry form" noValidate={false}>
+      {state.status === "error" && (
+        <div role="alert" className="border-l-4 border-red-700 bg-red-50 p-4 text-sm font-semibold text-red-800">
+          {state.message}
+        </div>
+      )}
+      {state.status === "invalid" && (
         <div role="alert" className="border-l-4 border-red-700 bg-red-50 p-4 text-sm font-semibold text-red-800">
           Please correct the highlighted fields and submit again.
         </div>
       )}
 
-      {state.status === "unavailable" && (
-        <div role="status" className="border-l-4 border-accent bg-steel-100 p-6">
-          <h3 className="text-lg font-extrabold uppercase text-navy-900">
-            Your enquiry has not been sent
-          </h3>
-          <p className="mt-2 leading-relaxed text-charcoal-700">
-            Online enquiry submission is not yet available, so no message has been delivered. Your
-            details are valid and are still in the form below. Please send them to us directly by
-            WhatsApp, email or phone.
-          </p>
-          <div className="mt-5 flex flex-col gap-3 sm:flex-row">
-            <ExternalButton
-              href={whatsappLink(state.whatsappMessage)}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <MessageCircle aria-hidden className="size-4" />
-              Send via WhatsApp
-            </ExternalButton>
-            <ExternalButton variant="outline" href={`mailto:${SITE.email}`}>
-              Email {SITE.email}
-            </ExternalButton>
-          </div>
-        </div>
-      )}
+      <input type="hidden" name="formToken" value={token} />
 
       <div className="grid gap-6 sm:grid-cols-2">
         <Field id="name" label="Full name" required error={errors.name}>
-          <input
-            {...common("name")}
-            type="text"
-            required
-            minLength={2}
-            maxLength={100}
-            autoComplete="name"
-            defaultValue={values.name}
-            className={inputClass}
-          />
+          <input {...common("name")} type="text" required minLength={2} maxLength={100} autoComplete="name" defaultValue={values.name} className={inputClass} />
         </Field>
         <Field id="company" label="Company" error={errors.company}>
-          <input
-            {...common("company")}
-            type="text"
-            maxLength={120}
-            autoComplete="organization"
-            defaultValue={values.company}
-            className={inputClass}
-          />
+          <input {...common("company")} type="text" maxLength={120} autoComplete="organization" defaultValue={values.company} className={inputClass} />
         </Field>
         <Field id="email" label="Email address" required error={errors.email}>
-          <input
-            {...common("email")}
-            type="email"
-            required
-            maxLength={160}
-            autoComplete="email"
-            defaultValue={values.email}
-            className={inputClass}
-          />
+          <input {...common("email")} type="email" required maxLength={160} autoComplete="email" defaultValue={values.email} className={inputClass} />
         </Field>
         <Field id="phone" label="Phone" error={errors.phone}>
-          <input
-            {...common("phone")}
-            type="tel"
-            maxLength={20}
-            autoComplete="tel"
-            defaultValue={values.phone}
-            placeholder="+263 ..."
-            className={inputClass}
-          />
+          <input {...common("phone")} type="tel" maxLength={20} autoComplete="tel" defaultValue={values.phone} placeholder="+263 ..." className={inputClass} />
         </Field>
       </div>
 
       <div className="grid gap-6 sm:grid-cols-2">
         <Field id="service" label="Service required" required error={errors.service}>
-          <select
-            {...common("service")}
-            required
-            defaultValue={values.service}
-            className={cn(inputClass, "appearance-none")}
-          >
+          <select {...common("service")} required defaultValue={values.service ?? ""} className={cn(inputClass, "appearance-none")}>
             <option value="" disabled>
               Select a service
             </option>
-            {SERVICE_OPTIONS.map((o) => (
+            {serviceOptions.map((o) => (
               <option key={o.value} value={o.value}>
                 {o.label}
               </option>
@@ -171,50 +161,53 @@ export function EnquiryForm({ defaultService = "" }: { defaultService?: string }
           </select>
         </Field>
         <Field id="location" label="Project location" required error={errors.location}>
-          <input
-            {...common("location")}
-            type="text"
-            required
-            minLength={2}
-            maxLength={160}
-            defaultValue={values.location}
-            placeholder="Town, suburb or site"
-            className={inputClass}
-          />
+          <input {...common("location")} type="text" required minLength={2} maxLength={160} defaultValue={values.location} placeholder="Town, suburb or site" className={inputClass} />
+        </Field>
+        <Field id="budget" label="Estimated budget (USD)" error={errors.budget}>
+          <select {...common("budget")} defaultValue={values.budget ?? ""} className={cn(inputClass, "appearance-none")}>
+            <option value="">Not sure yet</option>
+            {BUDGET_OPTIONS.filter((b) => b.value !== "not-sure").map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+        </Field>
+        <Field id="preferredStart" label="Preferred start date" error={errors.preferredStart}>
+          <input {...common("preferredStart")} type="date" defaultValue={values.preferredStart} className={inputClass} />
         </Field>
       </div>
-
-      <Field id="timeline" label="Required timeline" error={errors.timeline}>
-        <select
-          {...common("timeline")}
-          defaultValue={values.timeline}
-          className={cn(inputClass, "appearance-none")}
-        >
-          <option value="">Not sure yet</option>
-          {TIMELINE_OPTIONS.map((o) => (
-            <option key={o.value} value={o.value}>
-              {o.label}
-            </option>
-          ))}
-        </select>
-      </Field>
 
       <Field
         id="description"
         label="Project description"
         required
         error={errors.description}
-        hint="Include the type of building or site, the work required, approximate size or load, and your timeline."
+        hint="Include the type of building or site, the work required, approximate size or load, and any constraints."
       >
-        <textarea
-          {...common("description")}
-          required
-          minLength={20}
-          maxLength={3000}
-          rows={7}
-          defaultValue={values.description}
-          className={inputClass}
-        />
+        <textarea {...common("description")} required minLength={20} maxLength={3000} rows={7} defaultValue={values.description} className={inputClass} />
+      </Field>
+
+      <Field
+        id="documents"
+        label="Supporting documents"
+        error={errors.documents ?? fileError}
+        hint="Drawings, photos or specifications. PDF, JPG, PNG, DOCX or XLSX. Up to 3 files, 4 MB in total."
+      >
+        <div className="flex items-center gap-3 border-2 border-dashed border-steel-300 p-4">
+          <Paperclip aria-hidden className="size-5 shrink-0 text-steel-500" />
+          <input
+            id="documents"
+            name="documents"
+            type="file"
+            multiple
+            accept=".pdf,.jpg,.jpeg,.png,.docx,.xlsx"
+            onChange={onFiles}
+            aria-invalid={errors.documents || fileError ? true : undefined}
+            aria-describedby={errors.documents || fileError ? "documents-error" : undefined}
+            className="w-full text-sm file:mr-4 file:border-0 file:bg-navy-900 file:px-4 file:py-2 file:text-xs file:font-bold file:uppercase file:tracking-wider file:text-white"
+          />
+        </div>
       </Field>
 
       {/* Honeypot: hidden from people and assistive technology. */}
@@ -230,10 +223,16 @@ export function EnquiryForm({ defaultService = "" }: { defaultService?: string }
             type="checkbox"
             value="yes"
             required
-            defaultChecked={values.consent === "yes"}
             className="mt-1 size-5 shrink-0 accent-[#c2410c]"
           />
-          I agree that Zentrik Solutions may contact me about this enquiry using the details above.
+          <span>
+            I agree that Zentrik Solutions may store and use these details to respond to my
+            enquiry, as described in the{" "}
+            <a href="/privacy-policy" target="_blank" className="font-semibold underline">
+              Privacy Policy
+            </a>
+            .
+          </span>
         </label>
         {errors.consent && (
           <p id="consent-error" className="mt-1.5 text-sm font-semibold text-red-700">
@@ -242,8 +241,8 @@ export function EnquiryForm({ defaultService = "" }: { defaultService?: string }
         )}
       </div>
 
-      <SubmitButton pending={pending}>
-        {pending ? "Checking enquiry..." : "Submit Project Enquiry"}
+      <SubmitButton pending={pending || !token}>
+        {pending ? "Submitting..." : "Submit Project Enquiry"}
       </SubmitButton>
     </form>
   );

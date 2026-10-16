@@ -9,6 +9,7 @@ export type ServiceIcon =
 export type ServiceImage = { src: string; alt: string; width: number; height: number };
 
 export type Service = {
+  seo?: { title?: string; description?: string };
   image: ServiceImage;
   slug: string;
   title: string;

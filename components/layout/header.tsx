@@ -14,7 +14,9 @@ function isActive(pathname: string, href: string) {
   return pathname === href || pathname.startsWith(`${href}/`);
 }
 
-export function Header() {
+export type HeaderContact = { phone: string; phoneHref: string; email: string };
+
+export function Header({ contact }: { contact: HeaderContact }) {
   const pathname = usePathname();
   const [openPath, setOpenPath] = useState<string | null>(null);
   // The menu is open only for the page it was opened on, so navigating closes it.
@@ -41,13 +43,13 @@ export function Header() {
             Electrical engineering &middot; Zimbabwe
           </p>
           <div className="flex items-center gap-6">
-            <a href={SITE.phoneHref} className="flex items-center gap-2 hover:text-white">
+            <a href={contact.phoneHref} className="flex items-center gap-2 hover:text-white">
               <Phone aria-hidden className="size-3.5" />
-              {SITE.phone}
+              {contact.phone}
             </a>
-            <a href={`mailto:${SITE.email}`} className="flex items-center gap-2 hover:text-white">
+            <a href={`mailto:${contact.email}`} className="flex items-center gap-2 hover:text-white">
               <Mail aria-hidden className="size-3.5" />
-              {SITE.email}
+              {contact.email}
             </a>
           </div>
         </Container>
@@ -128,11 +130,11 @@ export function Header() {
             <div className="mt-8 flex flex-col gap-3">
               <ButtonLink href="/request-a-quote">Request a Project Quote</ButtonLink>
               <a
-                href={SITE.phoneHref}
+                href={contact.phoneHref}
                 className="flex items-center justify-center gap-2 border-2 border-navy-900 px-6 py-3.5 text-sm font-bold uppercase tracking-wider text-navy-900"
               >
                 <Phone aria-hidden className="size-4" />
-                {SITE.phone}
+                {contact.phone}
               </a>
             </div>
           </nav>

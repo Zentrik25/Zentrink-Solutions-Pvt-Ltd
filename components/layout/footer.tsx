@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { NAV, SITE, whatsappLink, WHATSAPP_DEFAULT_MESSAGE } from "@/lib/site";
-import { getIndustries, getServices } from "@/lib/data";
+import { getContact, getIndustries, getServices } from "@/lib/data";
 import { Container } from "@/components/ui/container";
 import { Logo } from "@/components/ui/logo";
 
@@ -9,7 +9,7 @@ const linkClass = "text-steel-300 hover:text-white";
 const headingClass = "mb-5 text-xs font-bold uppercase tracking-[0.2em] text-accent";
 
 export async function Footer() {
-  const [SERVICES, INDUSTRIES] = await Promise.all([getServices(), getIndustries()]);
+  const [SERVICES, INDUSTRIES, contact] = await Promise.all([getServices(), getIndustries(), getContact()]);
   return (
     <footer className="bg-charcoal-900 text-white">
       <Container className="grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr]">
@@ -60,14 +60,14 @@ export async function Footer() {
           <ul className="space-y-4 text-sm text-steel-300">
             <li className="flex gap-3">
               <Phone aria-hidden className="mt-0.5 size-4 shrink-0 text-accent" />
-              <a href={SITE.phoneHref} className="hover:text-white">
-                {SITE.phone}
+              <a href={contact.phoneHref} className="hover:text-white">
+                {contact.phone}
               </a>
             </li>
             <li className="flex gap-3">
               <MessageCircle aria-hidden className="mt-0.5 size-4 shrink-0 text-accent" />
               <a
-                href={whatsappLink(WHATSAPP_DEFAULT_MESSAGE)}
+                href={whatsappLink(WHATSAPP_DEFAULT_MESSAGE, contact.whatsappNumber)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="hover:text-white"
@@ -77,8 +77,8 @@ export async function Footer() {
             </li>
             <li className="flex gap-3">
               <Mail aria-hidden className="mt-0.5 size-4 shrink-0 text-accent" />
-              <a href={`mailto:${SITE.email}`} className="break-all hover:text-white">
-                {SITE.email}
+              <a href={contact.mailto} className="break-all hover:text-white">
+                {contact.email}
               </a>
             </li>
             <li className="flex gap-3">
