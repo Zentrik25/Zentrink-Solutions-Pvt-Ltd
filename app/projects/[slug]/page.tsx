@@ -2,21 +2,20 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { PROJECTS, getProject } from "@/lib/projects";
-import { getService } from "@/lib/services";
+import { getProject, getProjects, getService } from "@/lib/data";
 import { PageHero } from "@/components/ui/page-hero";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { CtaBand } from "@/components/ui/cta-band";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
-  return PROJECTS.map((p) => ({ slug: p.slug }));
+export async function generateStaticParams() {
+  return (await getProjects()).map((p) => ({ slug: p.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const project = getProject(slug);
+  const project = await getProject(slug);
   if (!project) return {};
   return {
     title: project.title,
@@ -33,10 +32,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ProjectPage({ params }: Props) {
   const { slug } = await params;
-  const project = getProject(slug);
+  const project = await getProject(slug);
   if (!project) notFound();
 
   const [lead, ...rest] = project.gallery;
+  const serviceLinks = await Promise.all(project.services.map((s) => getService(s)));
 
   return (
     <>
@@ -77,13 +77,12 @@ export default async function ProjectPage({ params }: Props) {
             {project.services.length > 0 && (
               <p className="mt-8 text-sm">
                 <span className="font-bold uppercase tracking-wider text-steel-500">Services: </span>
-                {project.services.map((s, i) => {
-                  const svc = getService(s);
+                {serviceLinks.map((svc, i) => {
                   if (!svc) return null;
                   return (
-                    <span key={s}>
+                    <span key={svc.slug}>
                       {i > 0 && ", "}
-                      <Link href={`/services/${s}`} className="font-bold text-navy-900 underline underline-offset-4">
+                      <Link href={`/services/${svc.slug}`} className="font-bold text-navy-900 underline underline-offset-4">
                         {svc.title}
                       </Link>
                     </span>

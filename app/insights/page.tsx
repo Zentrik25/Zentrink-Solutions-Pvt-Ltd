@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, Search } from "lucide-react";
 import {
-  ARTICLES,
   ARTICLE_CATEGORIES,
   formatDate,
   readingMinutes,
 } from "@/lib/articles";
+import { getArticles } from "@/lib/data";
 import { PageHero } from "@/components/ui/page-hero";
 import { Section } from "@/components/ui/section";
 import { CtaBand } from "@/components/ui/cta-band";
@@ -36,6 +36,7 @@ function href(params: { q?: string; category?: string; page?: number }) {
 
 export default async function InsightsPage({ searchParams }: Props) {
   const sp = await searchParams;
+  const ARTICLES = await getArticles();
   const q = (sp.q ?? "").trim().slice(0, 100);
   const category = ARTICLE_CATEGORIES.find((c) => c === sp.category);
 

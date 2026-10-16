@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, Check } from "lucide-react";
-import { SERVICES, getService } from "@/lib/services";
+import { getIndustriesForService, getService, getServices } from "@/lib/data";
 import { PageHero } from "@/components/ui/page-hero";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { ButtonLink } from "@/components/ui/button";
@@ -15,13 +15,13 @@ import { SITE } from "@/lib/site";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
-  return SERVICES.map((s) => ({ slug: s.slug }));
+export async function generateStaticParams() {
+  return (await getServices()).map((s) => ({ slug: s.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const service = getService(slug);
+  const service = await getService(slug);
   if (!service) return {};
   return {
     title: service.title,
@@ -37,12 +37,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ServicePage({ params }: Props) {
   const { slug } = await params;
-  const service = getService(slug);
+  const service = await getService(slug);
   if (!service) notFound();
 
-  const related = service.related
-    .map((r) => getService(r))
-    .filter((s): s is NonNullable<typeof s> => Boolean(s));
+  const [relatedAll, industries] = await Promise.all([
+    Promise.all(service.related.map((r) => getService(r))),
+    getIndustriesForService(service.slug),
+  ]);
+  const related = relatedAll.filter((s): s is NonNullable<typeof s> => Boolean(s));
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -65,7 +67,7 @@ export default async function ServicePage({ params }: Props) {
           { label: service.title },
         ]}
       >
-        <ButtonLink href={`/contact?service=${service.slug}`}>Request a Project Quote</ButtonLink>
+        <ButtonLink href={`/request-a-quote?service=${service.slug}`}>Request a Project Quote</ButtonLink>
       </PageHero>
 
       <Image
@@ -116,6 +118,31 @@ export default async function ServicePage({ params }: Props) {
           ))}
         </ul>
       </Section>
+
+      {industries.length > 0 && (
+        <Section>
+          <div className="grid gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
+            <SectionHeading
+              eyebrow="Relevant industries"
+              title="Where this service is applied"
+              intro="The same engineering approach adapts to the conditions of each sector."
+            />
+            <ul className="border-t border-navy-900">
+              {industries.map((ind) => (
+                <li key={ind.slug} className="border-b border-steel-300">
+                  <Link
+                    href={`/industries/${ind.slug}`}
+                    className="group flex items-center justify-between gap-4 py-5 hover:bg-steel-100 sm:px-4"
+                  >
+                    <span className="text-lg font-extrabold uppercase text-navy-900">{ind.title}</span>
+                    <ArrowRight aria-hidden className="size-4 text-steel-400 group-hover:text-accent-strong" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Section>
+      )}
 
       <Section tone="navy">
         <SectionHeading tone="navy" eyebrow="Process" title="How we deliver" />

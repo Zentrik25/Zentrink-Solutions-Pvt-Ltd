@@ -16,8 +16,8 @@ export default function NotFound() {
           <ButtonLink href="/services" variant="outline">
             View Services
           </ButtonLink>
-          <ButtonLink href="/contact" variant="outline">
-            Contact Us
+          <ButtonLink href="/request-a-quote" variant="outline">
+            Request a Quote
           </ButtonLink>
         </div>
       </Section>

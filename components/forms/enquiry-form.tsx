@@ -5,6 +5,7 @@ import { MessageCircle } from "lucide-react";
 import { submitEnquiry } from "@/app/contact/actions";
 import {
   SERVICE_OPTIONS,
+  TIMELINE_OPTIONS,
   emptyValues,
   type EnquiryField,
   type EnquiryState,
@@ -182,6 +183,21 @@ export function EnquiryForm({ defaultService = "" }: { defaultService?: string }
           />
         </Field>
       </div>
+
+      <Field id="timeline" label="Required timeline" error={errors.timeline}>
+        <select
+          {...common("timeline")}
+          defaultValue={values.timeline}
+          className={cn(inputClass, "appearance-none")}
+        >
+          <option value="">Not sure yet</option>
+          {TIMELINE_OPTIONS.map((o) => (
+            <option key={o.value} value={o.value}>
+              {o.label}
+            </option>
+          ))}
+        </select>
+      </Field>
 
       <Field
         id="description"

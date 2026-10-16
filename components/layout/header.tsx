@@ -77,7 +77,7 @@ export function Header() {
               </Link>
             );
           })}
-          <ButtonLink href="/contact" className="ml-4 px-5 py-2.5">
+          <ButtonLink href="/request-a-quote" className="ml-4 px-5 py-2.5">
             Request a Quote
           </ButtonLink>
         </nav>
@@ -126,7 +126,7 @@ export function Header() {
               ))}
             </ul>
             <div className="mt-8 flex flex-col gap-3">
-              <ButtonLink href="/contact">Request a Project Quote</ButtonLink>
+              <ButtonLink href="/request-a-quote">Request a Project Quote</ButtonLink>
               <a
                 href={SITE.phoneHref}
                 className="flex items-center justify-center gap-2 border-2 border-navy-900 px-6 py-3.5 text-sm font-bold uppercase tracking-wider text-navy-900"

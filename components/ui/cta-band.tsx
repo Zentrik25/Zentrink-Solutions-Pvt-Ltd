@@ -12,7 +12,7 @@ export function CtaBand({
   text?: string;
   service?: string;
 }) {
-  const href = service ? `/contact?service=${service}` : "/contact";
+  const href = service ? `/request-a-quote?service=${service}` : "/request-a-quote";
   return (
     <section className="border-t-4 border-accent bg-navy-950 py-16 text-white lg:py-20">
       <Container className="grid items-center gap-10 lg:grid-cols-[1.4fr_1fr]">

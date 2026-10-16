@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { PROJECTS, PROJECT_CATEGORIES } from "@/lib/projects";
+import { PROJECT_CATEGORIES } from "@/lib/projects";
+import { getProjects } from "@/lib/data";
 import { PageHero } from "@/components/ui/page-hero";
 import { Section } from "@/components/ui/section";
 import { ButtonLink } from "@/components/ui/button";
@@ -19,6 +20,7 @@ type Props = { searchParams: Promise<{ category?: string }> };
 
 export default async function ProjectsPage({ searchParams }: Props) {
   const { category } = await searchParams;
+  const PROJECTS = await getProjects();
   const active = PROJECT_CATEGORIES.find((c) => c === category);
   const visible = active ? PROJECTS.filter((p) => p.category === active) : PROJECTS;
 
@@ -44,7 +46,7 @@ export default async function ProjectsPage({ searchParams }: Props) {
                 study will list its category, location, technical specifications and image gallery.
               </p>
               <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-                <ButtonLink href="/contact">Discuss Your Project</ButtonLink>
+                <ButtonLink href="/request-a-quote">Request a Quote</ButtonLink>
                 <ButtonLink href="/services" variant="outline">
                   Explore Our Services
                 </ButtonLink>

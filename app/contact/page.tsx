@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { SITE, whatsappLink, WHATSAPP_DEFAULT_MESSAGE } from "@/lib/site";
-import { SERVICES } from "@/lib/services";
+import { getServices } from "@/lib/data";
 import { PageHero } from "@/components/ui/page-hero";
 import { Section } from "@/components/ui/section";
 import { EnquiryForm } from "@/components/forms/enquiry-form";
@@ -17,6 +17,7 @@ type Props = { searchParams: Promise<{ service?: string }> };
 
 export default async function ContactPage({ searchParams }: Props) {
   const { service } = await searchParams;
+  const SERVICES = await getServices();
   const defaultService = SERVICES.some((s) => s.slug === service) ? service : "";
 
   const channels = [

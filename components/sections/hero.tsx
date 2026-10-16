@@ -21,7 +21,7 @@ export function Hero() {
             industrial electrical solutions for projects across Zimbabwe.
           </p>
           <div className="mt-10 flex flex-col gap-4 sm:flex-row">
-            <ButtonLink href="/contact">Request a Project Quote</ButtonLink>
+            <ButtonLink href="/request-a-quote">Request a Project Quote</ButtonLink>
             <ButtonLink href="/services" variant="outline-light">
               Explore Our Services
             </ButtonLink>

@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ARTICLES, formatDate, getArticle, readingMinutes } from "@/lib/articles";
+import { formatDate, readingMinutes } from "@/lib/articles";
+import { getArticle, getArticles } from "@/lib/data";
 import { SITE } from "@/lib/site";
 import { PageHero } from "@/components/ui/page-hero";
 import { Section } from "@/components/ui/section";
@@ -9,13 +10,13 @@ import { CtaBand } from "@/components/ui/cta-band";
 
 type Props = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
-  return ARTICLES.map((a) => ({ slug: a.slug }));
+export async function generateStaticParams() {
+  return (await getArticles()).map((a) => ({ slug: a.slug }));
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const article = getArticle(slug);
+  const article = await getArticle(slug);
   if (!article) return {};
   return {
     title: article.title,
@@ -34,9 +35,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ArticlePage({ params }: Props) {
   const { slug } = await params;
-  const article = getArticle(slug);
+  const article = await getArticle(slug);
   if (!article) notFound();
 
+  const ARTICLES = await getArticles();
   const more = ARTICLES.filter(
     (a) => a.slug !== article.slug && a.category === article.category,
   ).concat(ARTICLES.filter((a) => a.slug !== article.slug && a.category !== article.category))

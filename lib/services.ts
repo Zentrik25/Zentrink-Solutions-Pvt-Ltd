@@ -72,9 +72,9 @@ const BASE_SERVICES: Omit<Service, "image">[] = [
       },
     ],
     related: [
-      "electrical-testing-and-commissioning",
-      "power-distribution-infrastructure",
-      "electrical-equipment-procurement",
+      "testing-commissioning",
+      "power-distribution",
+      "electrical-procurement",
     ],
     faqs: [
       {
@@ -96,7 +96,7 @@ const BASE_SERVICES: Omit<Service, "image">[] = [
     ],
   },
   {
-    slug: "power-distribution-infrastructure",
+    slug: "power-distribution",
     title: "Power Distribution Infrastructure",
     icon: "network",
     summary:
@@ -144,9 +144,9 @@ const BASE_SERVICES: Omit<Service, "image">[] = [
       },
     ],
     related: [
-      "electrical-testing-and-commissioning",
-      "industrial-electrical-maintenance",
-      "electrical-equipment-procurement",
+      "testing-commissioning",
+      "industrial-maintenance",
+      "electrical-procurement",
     ],
     faqs: [
       {
@@ -164,7 +164,7 @@ const BASE_SERVICES: Omit<Service, "image">[] = [
     ],
   },
   {
-    slug: "solar-energy-systems",
+    slug: "solar-energy",
     title: "Solar Energy Systems",
     icon: "sun",
     summary:
@@ -213,8 +213,8 @@ const BASE_SERVICES: Omit<Service, "image">[] = [
     ],
     related: [
       "electrical-installations",
-      "electrical-testing-and-commissioning",
-      "electrical-equipment-procurement",
+      "testing-commissioning",
+      "electrical-procurement",
     ],
     faqs: [
       {
@@ -236,7 +236,7 @@ const BASE_SERVICES: Omit<Service, "image">[] = [
     ],
   },
   {
-    slug: "industrial-electrical-maintenance",
+    slug: "industrial-maintenance",
     title: "Industrial Electrical Maintenance",
     icon: "wrench",
     summary:
@@ -284,9 +284,9 @@ const BASE_SERVICES: Omit<Service, "image">[] = [
       },
     ],
     related: [
-      "electrical-testing-and-commissioning",
-      "power-distribution-infrastructure",
-      "electrical-equipment-procurement",
+      "testing-commissioning",
+      "power-distribution",
+      "electrical-procurement",
     ],
     faqs: [
       {
@@ -304,7 +304,7 @@ const BASE_SERVICES: Omit<Service, "image">[] = [
     ],
   },
   {
-    slug: "electrical-testing-and-commissioning",
+    slug: "testing-commissioning",
     title: "Electrical Testing and Commissioning",
     icon: "gauge",
     summary:
@@ -354,8 +354,8 @@ const BASE_SERVICES: Omit<Service, "image">[] = [
     ],
     related: [
       "electrical-installations",
-      "solar-energy-systems",
-      "industrial-electrical-maintenance",
+      "solar-energy",
+      "industrial-maintenance",
     ],
     faqs: [
       {
@@ -373,7 +373,7 @@ const BASE_SERVICES: Omit<Service, "image">[] = [
     ],
   },
   {
-    slug: "electrical-equipment-procurement",
+    slug: "electrical-procurement",
     title: "Electrical Equipment Procurement",
     icon: "package",
     summary:
@@ -420,8 +420,8 @@ const BASE_SERVICES: Omit<Service, "image">[] = [
       },
     ],
     related: [
-      "power-distribution-infrastructure",
-      "solar-energy-systems",
+      "power-distribution",
+      "solar-energy",
       "electrical-installations",
     ],
     faqs: [
@@ -449,31 +449,31 @@ const SERVICE_IMAGES: Record<string, ServiceImage> = {
     width: 1800,
     height: 1202,
   },
-  "power-distribution-infrastructure": {
+  "power-distribution": {
     src: "/images/distribution-substation.jpg",
     alt: "Electrical substation with insulators, busbars and overhead conductors against a blue sky",
     width: 1800,
     height: 1200,
   },
-  "solar-energy-systems": {
+  "solar-energy": {
     src: "/images/solar-array.jpg",
     alt: "Rows of ground-mounted solar PV panels in a field",
     width: 1800,
     height: 1198,
   },
-  "industrial-electrical-maintenance": {
+  "industrial-maintenance": {
     src: "/images/maintenance-testing-gloves.jpg",
     alt: "Gloved technician measuring voltage with a multimeter inside an industrial electrical enclosure",
     width: 1800,
     height: 949,
   },
-  "electrical-testing-and-commissioning": {
+  "testing-commissioning": {
     src: "/images/testing-probes.jpg",
     alt: "Gloved hands testing contactor terminals with multimeter probes",
     width: 1800,
     height: 1350,
   },
-  "electrical-equipment-procurement": {
+  "electrical-procurement": {
     src: "/images/control-panel.jpg",
     alt: "Neatly wired control panel with PLC modules, power supplies and labelled terminals",
     width: 1800,

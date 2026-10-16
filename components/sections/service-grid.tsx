@@ -1,10 +1,11 @@
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { SERVICES } from "@/lib/services";
+import { getServices } from "@/lib/data";
 import { ServiceIcon } from "@/components/ui/service-icon";
 
-export function ServiceGrid() {
+export async function ServiceGrid() {
+  const SERVICES = await getServices();
   return (
     <ul className="grid border-l border-t border-steel-300 md:grid-cols-2 lg:grid-cols-3">
       {SERVICES.map((s, i) => (

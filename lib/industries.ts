@@ -4,9 +4,12 @@ export type Industry = {
   summary: string;
   needs: string[];
   services: string[];
+  challenges: string[];
+  approach: string[];
+  faqs: { q: string; a: string }[];
 };
 
-export const INDUSTRIES: Industry[] = [
+const BASE_INDUSTRIES: Omit<Industry, "challenges" | "approach" | "faqs">[] = [
   {
     slug: "mining",
     title: "Mining",
@@ -19,9 +22,9 @@ export const INDUSTRIES: Industry[] = [
       "Solar and hybrid supply for remote or off-grid operations",
     ],
     services: [
-      "power-distribution-infrastructure",
-      "industrial-electrical-maintenance",
-      "solar-energy-systems",
+      "power-distribution",
+      "industrial-maintenance",
+      "solar-energy",
     ],
   },
   {
@@ -37,8 +40,8 @@ export const INDUSTRIES: Industry[] = [
     ],
     services: [
       "electrical-installations",
-      "industrial-electrical-maintenance",
-      "electrical-testing-and-commissioning",
+      "industrial-maintenance",
+      "testing-commissioning",
     ],
   },
   {
@@ -53,8 +56,8 @@ export const INDUSTRIES: Industry[] = [
       "Distribution across estates and outbuildings",
     ],
     services: [
-      "solar-energy-systems",
-      "power-distribution-infrastructure",
+      "solar-energy",
+      "power-distribution",
       "electrical-installations",
     ],
   },
@@ -71,8 +74,8 @@ export const INDUSTRIES: Industry[] = [
     ],
     services: [
       "electrical-installations",
-      "electrical-testing-and-commissioning",
-      "electrical-equipment-procurement",
+      "testing-commissioning",
+      "electrical-procurement",
     ],
   },
   {
@@ -88,8 +91,8 @@ export const INDUSTRIES: Industry[] = [
     ],
     services: [
       "electrical-installations",
-      "solar-energy-systems",
-      "electrical-testing-and-commissioning",
+      "solar-energy",
+      "testing-commissioning",
     ],
   },
   {
@@ -105,8 +108,8 @@ export const INDUSTRIES: Industry[] = [
     ],
     services: [
       "electrical-installations",
-      "solar-energy-systems",
-      "power-distribution-infrastructure",
+      "solar-energy",
+      "power-distribution",
     ],
   },
   {
@@ -121,9 +124,173 @@ export const INDUSTRIES: Industry[] = [
       "Maintenance programmes for public facilities",
     ],
     services: [
-      "power-distribution-infrastructure",
-      "industrial-electrical-maintenance",
-      "solar-energy-systems",
+      "power-distribution",
+      "industrial-maintenance",
+      "solar-energy",
     ],
   },
 ];
+
+type Detail = Pick<Industry, "challenges" | "approach" | "faqs">;
+
+const DETAILS: Record<string, Detail> = {
+  mining: {
+    challenges: [
+      "Large motors with high starting currents and long cable runs that make voltage drop a design constraint",
+      "Dust, moisture, vibration and heat that shorten the life of enclosures, connections and cabling",
+      "Remote sites where supply is weak or unavailable and repairs are slow to arrange",
+    ],
+    approach: [
+      "Size cables and protection for starting duty and verify voltage drop at the furthest load.",
+      "Specify enclosures and cable glands with ingress protection suited to the site conditions.",
+      "Plan solar and hybrid supply for remote or off-grid loads, with generator integration where needed.",
+    ],
+    faqs: [
+      {
+        q: "Can you supply remote or off-grid mining operations?",
+        a: "Yes. We assess the load and design a solar, battery and generator arrangement sized to the site. The right mix depends on load profile, fuel logistics and how critical continuity of supply is.",
+      },
+      {
+        q: "Do you carry out shutdown maintenance?",
+        a: "Maintenance can be planned around scheduled shutdowns, with isolations, permits and test records agreed in advance with the site.",
+      },
+    ],
+  },
+  manufacturing: {
+    challenges: [
+      "Production losses when supply or distribution equipment fails without warning",
+      "Low power factor and harmonics from motors and drives that strain the network",
+      "Plant layouts that change over time while documentation does not",
+    ],
+    approach: [
+      "Survey the existing installation and record boards, circuits and loads.",
+      "Plan maintenance and testing around production schedules and shutdown windows.",
+      "Assess power factor and recommend correction only where it pays back.",
+    ],
+    faqs: [
+      {
+        q: "Can you work without stopping production?",
+        a: "Some inspection, such as visual checks and thermal imaging, can be done on live equipment under suitable safety conditions. Work that needs isolation is scheduled for agreed windows.",
+      },
+      {
+        q: "Can you update our electrical drawings and schedules?",
+        a: "Yes. A condition survey can include producing board schedules and single-line information for the installed system.",
+      },
+    ],
+  },
+  agriculture: {
+    challenges: [
+      "Irrigation and processing loads that are seasonal and often far from the grid",
+      "Long distribution routes across estates, with exposure to weather and animals",
+      "Cold storage and packhouse loads that cannot tolerate long interruptions",
+    ],
+    approach: [
+      "Match solar array and storage to pumping or processing loads and operating hours.",
+      "Protect motors and pumps against overload, phase loss and supply variation.",
+      "Design distribution routes and protection for long cable runs and outdoor conditions.",
+    ],
+    faqs: [
+      {
+        q: "Can solar run irrigation pumps directly?",
+        a: "Yes, solar pumping systems are well established. The design depends on pump size, head, flow requirements and whether storage or grid support is needed.",
+      },
+      {
+        q: "Do you cover cold rooms and packhouses?",
+        a: "We install and maintain the electrical supply, distribution and protection for cold storage and processing buildings, and can advise on standby arrangements.",
+      },
+    ],
+  },
+  construction: {
+    challenges: [
+      "Electrical packages that must fit tight programmes and follow other trades",
+      "Design coordination between architects, engineers and installers",
+      "Test records and documentation required before practical completion",
+    ],
+    approach: [
+      "Agree the electrical scope, specification and programme at the outset.",
+      "Coordinate containment routes and board locations with the wider design.",
+      "Complete inspection, testing and handover documentation as part of the package.",
+    ],
+    faqs: [
+      {
+        q: "Do you work as an electrical sub-contractor?",
+        a: "Yes. We can take on the electrical package for building and infrastructure projects. Send us the drawings and specification and we will confirm what we need to price it.",
+      },
+      {
+        q: "Can you provide temporary site supplies?",
+        a: "We can design and install builders' distribution and temporary supplies for construction sites.",
+      },
+    ],
+  },
+  "commercial-buildings": {
+    challenges: [
+      "Rising operating costs and supply interruptions that affect trading",
+      "Fit-outs and tenant changes that overload original distribution",
+      "Lighting and small-power layouts that must be flexible and safe",
+    ],
+    approach: [
+      "Assess existing capacity before adding load or solar.",
+      "Provide clearly labelled boards and circuit schedules for facilities teams.",
+      "Size solar and backup to the loads that matter most to the business.",
+    ],
+    faqs: [
+      {
+        q: "Can you upgrade the electrics of an occupied building?",
+        a: "Yes. We phase the work and agree isolation windows with the occupier to keep disruption short.",
+      },
+      {
+        q: "Is solar suitable for an office or retail premises?",
+        a: "Often, where there is roof space and daytime consumption. We assess your load profile and recommend a system, or tell you if the case is weak.",
+      },
+    ],
+  },
+  "residential-developments": {
+    challenges: [
+      "Consistent, compliant installations across many units",
+      "Provision for future solar and storage without costly rework",
+      "Clear documentation for owners and for completion",
+    ],
+    approach: [
+      "Standardise board layouts and circuit schedules across unit types.",
+      "Include containment and board space for later solar and backup power.",
+      "Inspect, test and document each installation before handover.",
+    ],
+    faqs: [
+      {
+        q: "Do you work on individual homes?",
+        a: "Yes, from house wiring and board upgrades to solar and backup power for a single home.",
+      },
+      {
+        q: "Can you design reticulation for a housing development?",
+        a: "We design and install on-site distribution, and prepare the technical information needed for supply connection applications.",
+      },
+    ],
+  },
+  "public-infrastructure": {
+    challenges: [
+      "Facilities that must stay in service, such as pumping stations, clinics and schools",
+      "Limited maintenance budgets and ageing electrical equipment",
+      "Procurement processes that require clear specifications and documentation",
+    ],
+    approach: [
+      "Survey and prioritise equipment by criticality and condition.",
+      "Prepare clear scopes, specifications and bills for procurement review.",
+      "Provide backup and solar supply for critical services where it is justified.",
+    ],
+    faqs: [
+      {
+        q: "Can you respond to tenders and formal procurement?",
+        a: "Yes. Contact us with the tender documents and we will confirm whether we can respond and what information is required.",
+      },
+      {
+        q: "Can you help us prioritise electrical repairs?",
+        a: "A condition survey produces a prioritised report that ranks defects by safety risk and operational importance.",
+      },
+    ],
+  },
+};
+
+export const INDUSTRIES: Industry[] = BASE_INDUSTRIES.map((i) => ({
+  ...i,
+  ...DETAILS[i.slug],
+}));

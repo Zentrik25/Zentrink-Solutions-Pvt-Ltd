@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { SERVICES } from "@/lib/services";
+import { getServices } from "@/lib/data";
 import { PageHero } from "@/components/ui/page-hero";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { ServiceIcon } from "@/components/ui/service-icon";
@@ -16,7 +16,8 @@ export const metadata: Metadata = {
   alternates: { canonical: "/services" },
 };
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const SERVICES = await getServices();
   return (
     <>
       <PageHero

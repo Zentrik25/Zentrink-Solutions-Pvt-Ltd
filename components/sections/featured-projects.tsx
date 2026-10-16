@@ -1,11 +1,11 @@
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
-import { PROJECTS } from "@/lib/projects";
+import { getFeaturedProjects } from "@/lib/data";
 import { ButtonLink } from "@/components/ui/button";
 
-export function FeaturedProjects() {
-  const featured = PROJECTS.slice(0, 3);
+export async function FeaturedProjects() {
+  const featured = await getFeaturedProjects(3);
 
   if (featured.length === 0) {
     return (
@@ -21,7 +21,7 @@ export function FeaturedProjects() {
           </p>
         </div>
         <div className="flex flex-col justify-center gap-3">
-          <ButtonLink href="/contact">Discuss Your Project</ButtonLink>
+          <ButtonLink href="/request-a-quote">Request a Quote</ButtonLink>
           <ButtonLink href="/projects" variant="outline">
             Project Portfolio
           </ButtonLink>

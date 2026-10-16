@@ -21,7 +21,7 @@ export function PageHero({
       <Container>
         {crumbs && <Breadcrumbs items={crumbs} />}
         {eyebrow && <Eyebrow tone="navy">{eyebrow}</Eyebrow>}
-        <h1 className="max-w-4xl text-4xl font-extrabold uppercase leading-[1.02] sm:text-5xl lg:text-6xl">
+        <h1 className="max-w-4xl text-[1.9rem] font-extrabold uppercase leading-[1.05] sm:text-5xl lg:text-6xl">
           {title}
         </h1>
         {intro && (

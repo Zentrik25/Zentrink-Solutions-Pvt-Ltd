@@ -5,6 +5,13 @@ export const SERVICE_OPTIONS = [
   { value: "multiple", label: "Multiple services / not sure yet" },
 ] as const;
 
+export const TIMELINE_OPTIONS = [
+  { value: "urgent", label: "Urgent (within 2 weeks)" },
+  { value: "1-3-months", label: "Within 1 to 3 months" },
+  { value: "3-6-months", label: "Within 3 to 6 months" },
+  { value: "planning", label: "Planning stage / no fixed date" },
+] as const;
+
 export const ENQUIRY_FIELDS = [
   "name",
   "company",
@@ -12,6 +19,7 @@ export const ENQUIRY_FIELDS = [
   "phone",
   "service",
   "location",
+  "timeline",
   "description",
   "consent",
 ] as const;
@@ -39,6 +47,7 @@ export function emptyValues(service = ""): EnquiryValues {
     phone: "",
     service,
     location: "",
+    timeline: "",
     description: "",
     consent: "",
   };
@@ -67,6 +76,9 @@ export function validateEnquiry(values: EnquiryValues): EnquiryErrors {
   if (values.location.length < 2 || values.location.length > 160)
     errors.location = "Enter the project location (town, suburb or site).";
 
+  if (values.timeline && !TIMELINE_OPTIONS.some((o) => o.value === values.timeline))
+    errors.timeline = "Select a timeline from the list.";
+
   if (values.description.length < 20)
     errors.description = "Describe the project in at least 20 characters.";
   else if (values.description.length > 3000)
@@ -80,6 +92,7 @@ export function validateEnquiry(values: EnquiryValues): EnquiryErrors {
 
 export function enquiryToText(v: EnquiryValues): string {
   const service = SERVICE_OPTIONS.find((o) => o.value === v.service)?.label ?? v.service;
+  const timeline = TIMELINE_OPTIONS.find((o) => o.value === v.timeline)?.label;
   return [
     "Project enquiry for Zentrik Solutions",
     `Name: ${v.name}`,
@@ -88,6 +101,7 @@ export function enquiryToText(v: EnquiryValues): string {
     v.phone && `Phone: ${v.phone}`,
     `Service: ${service}`,
     `Location: ${v.location}`,
+    timeline && `Timeline: ${timeline}`,
     `Description: ${v.description}`,
   ]
     .filter(Boolean)

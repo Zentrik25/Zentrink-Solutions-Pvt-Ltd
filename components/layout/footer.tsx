@@ -1,15 +1,15 @@
 import Link from "next/link";
 import { Mail, MapPin, MessageCircle, Phone } from "lucide-react";
 import { NAV, SITE, whatsappLink, WHATSAPP_DEFAULT_MESSAGE } from "@/lib/site";
-import { SERVICES } from "@/lib/services";
-import { INDUSTRIES } from "@/lib/industries";
+import { getIndustries, getServices } from "@/lib/data";
 import { Container } from "@/components/ui/container";
 import { Logo } from "@/components/ui/logo";
 
 const linkClass = "text-steel-300 hover:text-white";
 const headingClass = "mb-5 text-xs font-bold uppercase tracking-[0.2em] text-accent";
 
-export function Footer() {
+export async function Footer() {
+  const [SERVICES, INDUSTRIES] = await Promise.all([getServices(), getIndustries()]);
   return (
     <footer className="bg-charcoal-900 text-white">
       <Container className="grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr]">
@@ -46,6 +46,11 @@ export function Footer() {
                   </Link>
                 </li>
               ))}
+              <li>
+                <Link href="/request-a-quote" className={linkClass}>
+                  Request a Quote
+                </Link>
+              </li>
             </ul>
           </nav>
         </div>
@@ -93,16 +98,26 @@ export function Footer() {
             <ul className="flex flex-wrap gap-x-5 gap-y-2">
               {INDUSTRIES.map((i) => (
                 <li key={i.slug}>
-                  <Link href={`/industries#${i.slug}`} className="hover:text-white">
+                  <Link href={`/industries/${i.slug}`} className="hover:text-white">
                     {i.title}
                   </Link>
                 </li>
               ))}
             </ul>
           </div>
-          <p className="lg:text-right">
-            &copy; {new Date().getFullYear()} {SITE.name}. All rights reserved.
-          </p>
+          <div className="lg:text-right">
+            <p>
+              &copy; {new Date().getFullYear()} {SITE.name}. All rights reserved.
+            </p>
+            <p className="mt-2 flex gap-5 lg:justify-end">
+              <Link href="/privacy-policy" className="hover:text-white">
+                Privacy Policy
+              </Link>
+              <Link href="/terms-of-use" className="hover:text-white">
+                Terms of Use
+              </Link>
+            </p>
+          </div>
         </Container>
       </div>
     </footer>
