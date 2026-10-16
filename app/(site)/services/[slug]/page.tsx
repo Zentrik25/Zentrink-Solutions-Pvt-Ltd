@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { absoluteUrl, jsonLd as safeJsonLd, pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -23,16 +24,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const service = await getService(slug);
   if (!service) return {};
-  return {
+  return pageMetadata({
     title: service.seo?.title ?? service.title,
     description: service.seo?.description ?? service.summary,
-    alternates: { canonical: `/services/${service.slug}` },
-    openGraph: {
-      title: `${service.title} | ${SITE.shortName}`,
-      description: service.summary,
-      url: `/services/${service.slug}`,
-    },
-  };
+    path: `/services/${service.slug}`,
+  });
 }
 
 export default async function ServicePage({ params }: Props) {
@@ -46,13 +42,17 @@ export default async function ServicePage({ params }: Props) {
   ]);
   const related = relatedAll.filter((s): s is NonNullable<typeof s> => Boolean(s));
 
-  const jsonLd = {
+  const structuredData = {
     "@context": "https://schema.org",
     "@type": "Service",
+    "@id": `${absoluteUrl(`/services/${service.slug}`)}#service`,
     name: service.title,
+    serviceType: service.title,
     description: service.summary,
-    provider: { "@type": "Organization", name: SITE.name, url: SITE.url },
+    url: absoluteUrl(`/services/${service.slug}`),
+    provider: { "@type": "Organization", "@id": `${absoluteUrl("/")}#organization`, name: SITE.name, url: SITE.url },
     areaServed: { "@type": "Country", name: SITE.country },
+    image: service.image.src.startsWith("http") ? service.image.src : absoluteUrl(service.image.src),
   };
 
   return (
@@ -75,7 +75,8 @@ export default async function ServicePage({ params }: Props) {
         alt={service.image.alt}
         width={service.image.width}
         height={service.image.height}
-        priority
+        fetchPriority="high"
+        loading="eager"
         sizes="100vw"
         className="aspect-[16/9] max-h-[32rem] w-full object-cover"
       />
@@ -135,7 +136,7 @@ export default async function ServicePage({ params }: Props) {
                     className="group flex items-center justify-between gap-4 py-5 hover:bg-steel-100 sm:px-4"
                   >
                     <span className="text-lg font-extrabold uppercase text-navy-900">{ind.title}</span>
-                    <ArrowRight aria-hidden className="size-4 text-steel-400 group-hover:text-accent-strong" />
+                    <ArrowRight aria-hidden className="size-4 text-steel-500 group-hover:text-accent-strong" />
                   </Link>
                 </li>
               ))}
@@ -189,7 +190,7 @@ export default async function ServicePage({ params }: Props) {
 
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(structuredData) }}
       />
     </>
   );

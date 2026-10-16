@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { SITE } from "@/lib/site";
 import { ProsePage } from "@/components/ui/prose-page";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Terms of Use",
-  description: "Terms governing the use of the Zentrik Solutions (Pvt) Ltd website.",
-  alternates: { canonical: "/terms-of-use" },
-};
+  description:
+    "Terms governing the use of the Zentrik Solutions (Pvt) Ltd website.",
+  path: "/terms-of-use",
+});
 
 export default function TermsPage() {
   return (

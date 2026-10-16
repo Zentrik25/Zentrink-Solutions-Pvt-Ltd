@@ -3,7 +3,8 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { MessageCircle, Phone, Mail } from "lucide-react";
 import { SITE, whatsappLink, WHATSAPP_DEFAULT_MESSAGE } from "@/lib/site";
-import { getContact, getHomepage, getIndustries, getServices } from "@/lib/data";
+import { getContact, getHomepage, getIndustries, getSeo, getServices } from "@/lib/data";
+import { pageMetadata } from "@/lib/seo";
 import { Hero } from "@/components/sections/hero";
 import { ServiceGrid } from "@/components/sections/service-grid";
 import { FeaturedProjects } from "@/components/sections/featured-projects";
@@ -12,10 +13,10 @@ import { Section, SectionHeading } from "@/components/ui/section";
 import { ButtonLink } from "@/components/ui/button";
 import { EnquiryForm } from "@/components/forms/enquiry-form";
 
-export const metadata: Metadata = {
-  title: { absolute: `${SITE.shortName} | Electrical Engineering in Zimbabwe` },
-  description: SITE.description,
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const seo = await getSeo();
+  return pageMetadata({ title: seo.defaultTitle, description: seo.defaultDescription, path: "/", absoluteTitle: true });
+}
 
 const CAPABILITIES = [
   {
@@ -148,7 +149,7 @@ export default async function HomePage() {
                   className="group flex items-center justify-between gap-4 py-5 transition-colors hover:bg-steel-100 sm:px-4"
                 >
                   <span className="flex items-baseline gap-5">
-                    <span className="font-display text-sm font-bold text-steel-400">
+                    <span className="font-display text-sm font-bold text-steel-500">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <span className="text-xl font-extrabold uppercase text-navy-900">
@@ -157,7 +158,7 @@ export default async function HomePage() {
                   </span>
                   <ArrowUpRight
                     aria-hidden
-                    className="size-5 text-steel-400 group-hover:text-accent-strong"
+                    className="size-5 text-steel-500 group-hover:text-accent-strong"
                   />
                 </Link>
               </li>

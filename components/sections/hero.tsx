@@ -38,7 +38,8 @@ export function Hero({
             alt="Power transformer and switchgear at an electrical substation"
             width={1800}
             height={1350}
-            priority
+            fetchPriority="high"
+            loading="eager"
             sizes="(min-width: 1024px) 40vw, 100vw"
             className="aspect-[4/3] w-full object-cover lg:aspect-[4/5]"
           />

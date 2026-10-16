@@ -55,6 +55,7 @@ async function main() {
         slug: s.slug, title: s.title, summary: s.summary, icon: s.icon, overview: s.overview,
         scope: s.scope, applications: s.applications, process: s.process, faqs: s.faqs,
         imageId: mediaByUrl.get(s.slug), status: "PUBLISHED", publishedAt: now, sortOrder: i,
+        seoTitle: s.seo?.title, seoDescription: s.seo?.description,
       },
     });
   }
@@ -86,12 +87,23 @@ async function main() {
     });
     categoryIds.set(name, c.id);
   }
+  // Short, search-friendly titles (about 60 characters) and descriptions for the launch articles.
+  const ARTICLE_SEO: Record<string, [string, string]> = {
+    "sizing-a-solar-pv-system-for-a-commercial-load": ["How to Size a Commercial Solar PV System", "The inputs that decide array, inverter and battery size for a commercial solar PV system: load profile, peak demand, roof area and your objective."],
+    "cable-sizing-fundamentals-current-voltage-drop-fault-withstand": ["Cable Sizing: Current, Voltage Drop, Fault Withstand", "A cable must pass three separate checks: current capacity, voltage drop and fault withstand. How each is calculated and why they must be done together."],
+    "why-pre-energisation-testing-matters": ["Why Pre-Energisation Electrical Testing Matters", "Inspection and testing before an installation is energised is the evidence it is safe. The core tests and what each one confirms."],
+    "planned-versus-reactive-electrical-maintenance": ["Planned vs Reactive Electrical Maintenance", "Waiting for equipment to fail is costly. What planned electrical maintenance involves in industrial plants and how to prioritise it."],
+    "procurement-checklist-for-distribution-boards-and-switchgear": ["Switchgear and Distribution Board Procurement Checklist", "Settle ratings, fault levels, standards and support before requesting quotations for distribution boards and switchgear."],
+    "power-factor-correction-and-when-it-pays-back": ["Power Factor Correction: When Does It Pay Back?", "What power factor is, why low power factor costs money and capacity, how it is corrected, and when correction is worth the investment."],
+    "hybrid-solar-design-for-supply-interruptions": ["Hybrid Solar Design for Supply Interruptions", "How hybrid solar and battery systems keep critical loads running during outages: critical-load boards, sizing, protection and commissioning."],
+  };
   for (const a of ARTICLES) {
     if (await prisma.article.findUnique({ where: { slug: a.slug } })) continue;
     await prisma.article.create({
       data: {
         slug: a.slug, title: a.title, excerpt: a.excerpt, body: a.body,
         categoryId: categoryIds.get(a.category)!, status: "PUBLISHED", publishedAt: new Date(`${a.published}T08:00:00Z`),
+        seoTitle: ARTICLE_SEO[a.slug]?.[0], seoDescription: ARTICLE_SEO[a.slug]?.[1],
       },
     });
   }

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getSessionUser } from "@/lib/auth/session";
+import { requirePage } from "@/lib/auth/session";
 import { can } from "@/lib/auth/permissions";
 import { db } from "@/lib/server/db";
 import { STATUS_LABEL } from "@/lib/enquiry/workflow";
@@ -9,7 +9,7 @@ import { Badge, Panel, PageTitle } from "@/components/admin/shell";
 export const metadata: Metadata = { title: "Dashboard" };
 
 export default async function Dashboard({ searchParams }: { searchParams: Promise<{ denied?: string }> }) {
-  const user = (await getSessionUser())!;
+  const user = await requirePage();
   const { denied } = await searchParams;
   const showEnquiries = can(user.role, "enquiries:read");
   const showContent = can(user.role, "content:read");

@@ -10,13 +10,30 @@ import { PageHero } from "@/components/ui/page-hero";
 import { Section } from "@/components/ui/section";
 import { CtaBand } from "@/components/ui/cta-band";
 import { cn } from "@/lib/cn";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Insights: Technical Articles",
-  description:
-    "Technical articles on electrical installations, solar energy, power systems, testing and maintenance from Zentrik Solutions.",
-  alternates: { canonical: "/insights" },
-};
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const sp = await searchParams;
+  const base = {
+    title: "Electrical Engineering Insights Zimbabwe",
+    description:
+      "Technical articles on electrical installations, solar energy, power systems, testing and maintenance from Zentrik Solutions.",
+  };
+  // Internal search results are thin, near-infinite URLs: keep them out of the index.
+  if (sp.q?.trim()) return pageMetadata({ ...base, path: "/insights", noindex: true });
+  const categories = await getArticleCategories();
+  const category = categories.find((c) => c === sp.category);
+  const page = Math.max(1, Number.parseInt(sp.page ?? "1", 10) || 1);
+  const qs = new URLSearchParams();
+  if (category) qs.set("category", category);
+  if (page > 1) qs.set("page", String(page));
+  const suffix = qs.toString() ? `?${qs}` : "";
+  return pageMetadata({
+    ...base,
+    title: category ? `${category} Articles` : page > 1 ? `${base.title} (Page ${page})` : base.title,
+    path: `/insights${suffix}`,
+  });
+}
 
 const PAGE_SIZE = 6;
 

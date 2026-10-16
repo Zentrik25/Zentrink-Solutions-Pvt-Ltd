@@ -1,0 +1,32 @@
+name: Release - database migration
+# Manual, approval-gated. Never runs automatically on deploy.
+on:
+  workflow_dispatch:
+    inputs:
+      allow_destructive:
+        description: "Allow destructive statements (only after reviewing the SQL and verifying a backup)"
+        type: boolean
+        default: false
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    environment: production   # configure required reviewers on this environment
+    env:
+      DIRECT_URL: ${{ secrets.PRODUCTION_DIRECT_URL }}
+      DATABASE_URL: ${{ secrets.PRODUCTION_DIRECT_URL }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm }
+      - run: sudo apt-get update && sudo apt-get install -y postgresql-client-16
+      - run: npm ci
+      - name: Guard against destructive migrations
+        env:
+          ALLOW_DESTRUCTIVE_MIGRATION: ${{ inputs.allow_destructive && '1' || '0' }}
+        run: npx tsx scripts/migration-guard.ts
+      - name: Pre-migration backup (verified readable)
+        run: ./scripts/backup.sh backups
+      - uses: actions/upload-artifact@v4
+        with: { name: pre-migration-backup, path: backups/, retention-days: 7 }
+      - name: Apply migrations
+        run: npx prisma migrate deploy

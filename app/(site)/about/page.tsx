@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { SITE } from "@/lib/site";
 import { getContact } from "@/lib/data";
 import { TEAM } from "@/lib/team";
@@ -7,12 +8,12 @@ import { Section, SectionHeading } from "@/components/ui/section";
 import { CtaBand } from "@/components/ui/cta-band";
 import { ButtonLink } from "@/components/ui/button";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "About Zentrik Solutions",
   description:
     "Company profile, mission, vision, values, engineering philosophy and our quality and safety commitments.",
-  alternates: { canonical: "/about" },
-};
+  path: "/about",
+});
 
 const VALUES = [
   {

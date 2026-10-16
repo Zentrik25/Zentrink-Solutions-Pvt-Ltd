@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import { MessageCircle, Phone, Mail } from "lucide-react";
 import { whatsappLink, WHATSAPP_DEFAULT_MESSAGE } from "@/lib/site";
 import { getContact, getServices } from "@/lib/data";
@@ -6,12 +7,12 @@ import { PageHero } from "@/components/ui/page-hero";
 import { Section } from "@/components/ui/section";
 import { EnquiryForm } from "@/components/forms/enquiry-form";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Request a Project Quote",
   description:
     "Request a quotation for electrical installations, power distribution, solar energy, maintenance, testing or equipment procurement in Zimbabwe.",
-  alternates: { canonical: "/request-a-quote" },
-};
+  path: "/request-a-quote",
+});
 
 type Props = { searchParams: Promise<{ service?: string }> };
 
@@ -48,7 +49,7 @@ export default async function RequestQuotePage({ searchParams }: Props) {
               <ol className="space-y-5">
                 {STEPS.map((s, i) => (
                   <li key={s.title} className="grid grid-cols-[2.5rem_1fr] border-t border-steel-300 pt-5">
-                    <span className="font-display text-lg font-black text-accent">
+                    <span className="font-display text-lg font-black text-accent-strong">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <div>

@@ -1,6 +1,7 @@
 "use server";
 
 import { after } from "next/server";
+import { log } from "@/lib/server/log";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { AuthError } from "@/lib/auth/session";
@@ -37,7 +38,7 @@ export async function sendQuotationAction(id: string, _p: FormState, _fd: FormDa
   if (!res.ok) return { ok: false, error: res.error };
   const nid = (res as { notificationId: string }).notificationId;
   after(async () => {
-    try { await processNotifications({ ids: [nid] }); } catch (e) { console.error("quotation email processing failed", String(e)); }
+    try { await processNotifications({ ids: [nid] }); } catch (e) { log("error", "quotation.email_processing_failed", {}, e); }
   });
   revalidatePath(`/admin/quotations/${id}`);
   return { ok: true, message: "Quotation queued for delivery. Delivery status is shown below." };

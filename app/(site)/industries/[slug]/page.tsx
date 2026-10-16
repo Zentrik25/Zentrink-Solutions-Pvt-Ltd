@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, Check } from "lucide-react";
@@ -20,13 +21,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const industry = await getIndustry(slug);
   if (!industry) return {};
-  const title = industry.seo?.title ?? `Electrical Engineering for ${industry.title}`;
-  return {
-    title,
+  return pageMetadata({
+    title: industry.seo?.title ?? `Electrical Engineering for ${industry.title}`,
     description: industry.seo?.description ?? industry.summary.slice(0, 158),
-    alternates: { canonical: `/industries/${industry.slug}` },
-    openGraph: { title, description: industry.summary.slice(0, 158), url: `/industries/${industry.slug}` },
-  };
+    path: `/industries/${industry.slug}`,
+  });
 }
 
 export default async function IndustryPage({ params }: Props) {

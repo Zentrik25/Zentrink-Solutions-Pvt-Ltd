@@ -36,7 +36,8 @@ export const resendProvider: EmailProvider = {
       {
         from: senderAddress(),
         to: email.to,
-        subject: email.subject,
+        // Strip line breaks so user-influenced text can never inject mail headers.
+        subject: email.subject.replace(/[\r\n]+/g, " ").slice(0, 200),
         html: email.html,
         text: email.text,
         replyTo: email.replyTo,

@@ -3,6 +3,7 @@ import { Archivo, Inter } from "next/font/google";
 import "./globals.css";
 import { SITE } from "@/lib/site";
 import { getSeo } from "@/lib/data";
+import { isIndexable } from "@/lib/seo";
 
 const heading = Archivo({
   variable: "--font-heading",
@@ -26,18 +27,17 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { default: seo.defaultTitle, template: `%s | ${seo.titleSuffix}` },
     description: seo.defaultDescription,
     applicationName: SITE.shortName,
-    alternates: { canonical: "/" },
     openGraph: {
       type: "website",
       locale: "en_ZW",
       siteName: SITE.name,
       title: seo.defaultTitle,
       description: seo.defaultDescription,
-      url: "/",
       images: seo.ogImageUrl ? [{ url: seo.ogImageUrl }] : undefined,
     },
     twitter: { card: "summary_large_image", title: seo.defaultTitle, description: seo.defaultDescription },
-    robots: { index: true, follow: true },
+    robots: isIndexable() ? { index: true, follow: true } : { index: false, follow: false },
+    verification: process.env.NEXT_PUBLIC_GSC_VERIFICATION ? { google: process.env.NEXT_PUBLIC_GSC_VERIFICATION } : undefined,
   };
 }
 

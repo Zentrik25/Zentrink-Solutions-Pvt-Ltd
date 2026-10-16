@@ -1,6 +1,7 @@
 "use server";
 
 import { after } from "next/server";
+import { log } from "@/lib/server/log";
 import { createEnquiry, type UploadedFile } from "@/lib/enquiry/service";
 import { ENQUIRY_FIELD_NAMES, type EnquiryActionState } from "@/lib/enquiry/schema";
 import { processNotifications } from "@/lib/notifications/processor";
@@ -42,7 +43,7 @@ export async function submitEnquiryAction(
     try {
       await processNotifications({ ids: result.notificationIds });
     } catch (err) {
-      console.error("post-submit notification processing failed", String(err));
+      log("error", "enquiry.post_submit_processing_failed", {}, err);
     }
   });
 

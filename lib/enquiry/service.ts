@@ -1,4 +1,5 @@
 import { db } from "@/lib/server/db";
+import { log } from "@/lib/server/log";
 import { randomToken, hashIp } from "@/lib/server/crypto";
 import { rateLimit } from "@/lib/server/rate-limit";
 import { privateStore } from "@/lib/storage";
@@ -94,7 +95,7 @@ export async function createEnquiry(
     }
   } catch (err) {
     await cleanup(uploaded.map((u) => u.key));
-    console.error("enquiry attachment upload failed", String(err));
+    log("error", "enquiry.attachment_upload_failed", {}, err);
     return { ok: false, kind: "error", message: "We could not store your attachments. Please try again or send the enquiry without them." };
   }
 
@@ -161,14 +162,14 @@ export async function createEnquiry(
     return { ok: true, enquiryId: result.id, reference: result.reference, notificationIds: result.notificationIds };
   } catch (err) {
     await cleanup(uploaded.map((u) => u.key));
-    console.error("enquiry transaction failed", String(err));
+    log("error", "enquiry.transaction_failed", {}, err);
     return { ok: false, kind: "error", message: "We could not save your enquiry. Nothing was sent. Please try again or contact us directly." };
   }
 }
 
 async function cleanup(keys: string[]) {
   await Promise.all(
-    keys.map((k) => privateStore().remove(k).catch((e) => console.error("orphan cleanup failed", k, String(e)))),
+    keys.map((k) => privateStore().remove(k).catch((e) => log("warn", "enquiry.orphan_cleanup_failed", { key: k }, e))),
   );
 }
 

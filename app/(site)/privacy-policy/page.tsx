@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { SITE } from "@/lib/site";
 import { ProsePage } from "@/components/ui/prose-page";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Privacy Policy",
-  description: "How Zentrik Solutions (Pvt) Ltd collects, uses and protects personal information.",
-  alternates: { canonical: "/privacy-policy" },
-};
+  description:
+    "How Zentrik Solutions (Pvt) Ltd collects, uses and protects personal information.",
+  path: "/privacy-policy",
+});
 
 export default function PrivacyPage() {
   return (
@@ -48,9 +50,21 @@ export default function PrivacyPage() {
 
       <h2>Online enquiry form</h2>
       <p>
-        Online enquiry submission is being connected. Until the website states that the form is
-        active, information typed into the form is not stored or transmitted by us, and you should
-        contact us by phone, email or WhatsApp instead.
+        When you submit the project enquiry form, we store the details you enter, including any
+        documents you attach, in a secured database and private file storage. Only authorised staff
+        can see them. We email you an acknowledgement with a reference number and notify our team.
+        Attached documents are never publicly accessible.
+      </p>
+
+      <h2>Analytics and cookies</h2>
+      <p>
+        We use Google Analytics 4 to understand how the website is used. It is loaded <strong>only if
+        you accept</strong> in the cookie notice, and you can change your choice at any time using
+        &ldquo;Cookie settings&rdquo; in the footer. Analytics records page views and clicks on our
+        phone, email, WhatsApp and quote links. We never send the contents of enquiry forms, names,
+        email addresses or phone numbers to analytics. Without your consent, no analytics cookies are
+        set and no Google analytics scripts are requested. The website also uses a strictly necessary
+        session cookie for administrator sign-in, which does not apply to visitors.
       </p>
 
       <h2>WhatsApp and third parties</h2>

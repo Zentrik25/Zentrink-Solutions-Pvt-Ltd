@@ -1,4 +1,5 @@
 import type { Prisma } from "@/generated/prisma/client";
+import { log } from "@/lib/server/log";
 import { db } from "./db";
 
 export type AuditActor = { id: string; email: string } | null;
@@ -24,6 +25,6 @@ export async function audit(
     });
   } catch (err) {
     // Audit failure must never break the business operation, but is never silent.
-    console.error("audit log write failed", { action, entityType, err: String(err) });
+    log("error", "audit.write_failed", { action, entityType }, err);
   }
 }

@@ -40,6 +40,13 @@ migrations are applied automatically before the run and tables are reset between
 - Cron: `/api/cron/notifications` retries undelivered emails every 10 minutes. Vercel's Hobby plan only allows daily crons; change the schedule in `vercel.json` if you are on Hobby. New enquiry emails are still attempted immediately after each submission.
 - Enquiry attachments: Vercel limits request bodies to 4.5 MB, so uploads are capped at 3 files / 4 MB in total.
 
+## Operations and launch documentation
+- `docs/DEPLOYMENT.md`: Vercel setup, environment variables, domains, controlled database releases
+- `docs/RELEASE_CHECKLIST.md`: pre-launch, go-live and rollback checklist
+- `docs/OPERATIONS.md`: backups and restore test, monitoring, rollback, migration recovery, admin recovery
+- `docs/SECURITY_AUDIT.md`, `docs/SEO.md`, `docs/PERFORMANCE.md`: audit results
+- End-to-end browser suite: `BASE_URL=... ADMIN_EMAIL=... ADMIN_PASSWORD=... node tests/e2e/run.mjs`
+
 ## Architecture notes
 - **Data access:** public pages read published content only through `lib/data.ts`; drafts cannot leak.
 - **Authorisation:** every Server Action, Route Handler and domain function calls `authorize(permission)` itself (`lib/auth`). Roles: SUPER_ADMIN, ADMIN, EDITOR, SALES.

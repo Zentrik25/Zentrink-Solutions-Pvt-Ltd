@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
@@ -9,12 +10,12 @@ import { ServiceIcon } from "@/components/ui/service-icon";
 import { CtaBand } from "@/components/ui/cta-band";
 import { DELIVERY_PROCESS, ProcessSteps } from "@/components/sections/process-steps";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Electrical Engineering Services",
   description:
     "Electrical installations, power distribution, solar energy, industrial maintenance, testing and commissioning, and equipment procurement across Zimbabwe.",
-  alternates: { canonical: "/services" },
-};
+  path: "/services",
+});
 
 export default async function ServicesPage() {
   const SERVICES = await getServices();
@@ -33,7 +34,7 @@ export default async function ServicesPage() {
             <li key={s.slug} className="border-b border-steel-300">
               <Link
                 href={`/services/${s.slug}`}
-                className="group grid gap-6 py-10 transition-colors hover:bg-steel-100 md:grid-cols-[4rem_14rem_1fr_1.4fr_auto] md:items-start md:px-4"
+                className="group grid gap-6 py-10 transition-colors hover:bg-steel-100 lg:grid-cols-[4rem_14rem_1fr_1.4fr_auto] lg:items-start lg:px-4"
               >
                 <span className="font-display text-2xl font-black text-accent">
                   {String(i + 1).padStart(2, "0")}
@@ -43,8 +44,8 @@ export default async function ServicesPage() {
                   alt={s.image.alt}
                   width={s.image.width}
                   height={s.image.height}
-                  sizes="(min-width: 768px) 224px, 100vw"
-                  className="aspect-[16/9] w-full object-cover md:aspect-[4/3]"
+                  sizes="(min-width: 1024px) 224px, 100vw"
+                  className="aspect-[16/9] w-full object-cover lg:aspect-[4/3]"
                 />
                 <h2 className="flex items-start gap-4 text-2xl font-extrabold uppercase text-navy-900">
                   <ServiceIcon name={s.icon} className="mt-0.5 size-7 shrink-0" />

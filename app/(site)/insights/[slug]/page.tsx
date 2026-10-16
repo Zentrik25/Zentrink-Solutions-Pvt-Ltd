@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { absoluteUrl, jsonLd as safeJsonLd, pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { formatDate, readingMinutes } from "@/lib/articles";
@@ -18,19 +19,14 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const article = await getArticle(slug);
   if (!article) return {};
-  return {
+  return pageMetadata({
     title: article.seo?.title ?? article.title,
     description: article.seo?.description ?? article.excerpt,
-    alternates: { canonical: `/insights/${article.slug}` },
-    openGraph: {
-      type: "article",
-      title: article.title,
-      description: article.excerpt,
-      url: `/insights/${article.slug}`,
-      publishedTime: article.published,
-      section: article.category,
-    },
-  };
+    path: `/insights/${article.slug}`,
+    type: "article",
+    publishedTime: article.published,
+    section: article.category,
+  });
 }
 
 export default async function ArticlePage({ params }: Props) {
@@ -44,16 +40,23 @@ export default async function ArticlePage({ params }: Props) {
   ).concat(ARTICLES.filter((a) => a.slug !== article.slug && a.category !== article.category))
     .slice(0, 3);
 
-  const jsonLd = {
+  const structuredData = {
     "@context": "https://schema.org",
     "@type": "Article",
     headline: article.title,
     description: article.excerpt,
     datePublished: article.published,
+    dateModified: article.published,
     articleSection: article.category,
+    inLanguage: "en",
+    image: absoluteUrl(`/insights/${article.slug}/opengraph-image`),
     author: { "@type": "Organization", name: SITE.name },
-    publisher: { "@type": "Organization", name: SITE.name },
-    mainEntityOfPage: `${SITE.url}/insights/${article.slug}`,
+    publisher: {
+      "@type": "Organization",
+      name: SITE.name,
+      logo: { "@type": "ImageObject", url: absoluteUrl("/logo.png") },
+    },
+    mainEntityOfPage: { "@type": "WebPage", "@id": absoluteUrl(`/insights/${article.slug}`) },
   };
 
   return (
@@ -129,7 +132,7 @@ export default async function ArticlePage({ params }: Props) {
 
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: safeJsonLd(structuredData) }}
       />
     </>
   );

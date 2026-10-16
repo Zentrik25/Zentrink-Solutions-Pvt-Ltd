@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -17,17 +18,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const project = await getProject(slug);
   if (!project) return {};
-  return {
+  return pageMetadata({
     title: project.seo?.title ?? project.title,
     description: project.seo?.description ?? project.summary,
-    alternates: { canonical: `/projects/${project.slug}` },
-    openGraph: {
-      title: project.title,
-      description: project.summary,
-      url: `/projects/${project.slug}`,
-      images: project.gallery[0] ? [{ url: project.gallery[0].src }] : undefined,
-    },
-  };
+    path: `/projects/${project.slug}`,
+  });
 }
 
 export default async function ProjectPage({ params }: Props) {
@@ -58,7 +53,8 @@ export default async function ProjectPage({ params }: Props) {
             alt={lead.alt}
             width={lead.width}
             height={lead.height}
-            priority
+            fetchPriority="high"
+            loading="eager"
             sizes="100vw"
             className="mx-auto max-h-[36rem] w-full max-w-7xl object-cover"
           />

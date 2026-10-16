@@ -23,7 +23,12 @@ export const seoSettingsSchema = z.object({
   titleSuffix: z.string().trim().max(80),
   defaultTitle: z.string().trim().min(3).max(70),
   defaultDescription: z.string().trim().min(10).max(170),
-  ogImageUrl: z.string().trim().max(500).default(""),
+  ogImageUrl: z
+    .string()
+    .trim()
+    .max(500)
+    .refine((v) => v === "" || /^https:\/\/[^\s]+$/.test(v) || /^\/[^\s/][^\s]*$/.test(v), "Use an https:// URL or a path starting with /.")
+    .default(""),
 });
 
 export const quotationSettingsSchema = z.object({
@@ -76,7 +81,7 @@ export const SETTING_DEFAULTS = {
   },
   seo: {
     titleSuffix: SITE.shortName,
-    defaultTitle: `${SITE.shortName} | Electrical Engineering in Zimbabwe`,
+    defaultTitle: "Electrical Engineering Company Zimbabwe | Zentrik Solutions",
     defaultDescription: SITE.description,
     ogImageUrl: "",
   },

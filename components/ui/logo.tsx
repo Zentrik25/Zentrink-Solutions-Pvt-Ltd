@@ -13,7 +13,8 @@ export function Logo({ tone = "dark", className }: { tone?: "dark" | "light"; cl
         alt="Zentrik Solutions (Pvt) Ltd"
         width={1813}
         height={398}
-        priority
+        loading="eager"
+        sizes="(min-width: 640px) 200px, 180px"
         className="h-10 w-auto sm:h-11"
       />
     </span>

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import Image from "next/image";
 import { PROJECT_CATEGORIES } from "@/lib/projects";
@@ -9,12 +10,16 @@ import { ButtonLink } from "@/components/ui/button";
 import { CtaBand } from "@/components/ui/cta-band";
 import { cn } from "@/lib/cn";
 
-export const metadata: Metadata = {
-  title: "Projects",
-  description:
-    "Verified electrical engineering projects by Zentrik Solutions, with specifications and photography.",
-  alternates: { canonical: "/projects" },
-};
+export async function generateMetadata({ searchParams }: Props): Promise<Metadata> {
+  const { category } = await searchParams;
+  const active = PROJECT_CATEGORIES.find((c) => c === category);
+  return pageMetadata({
+    title: active ? `${active} Projects` : "Projects",
+    description:
+      "Verified electrical engineering projects by Zentrik Solutions, with specifications and photography.",
+    path: active ? `/projects?category=${encodeURIComponent(active)}` : "/projects",
+  });
+}
 
 type Props = { searchParams: Promise<{ category?: string }> };
 

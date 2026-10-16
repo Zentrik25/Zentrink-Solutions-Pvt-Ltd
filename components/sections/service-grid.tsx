@@ -28,7 +28,7 @@ export async function ServiceGrid() {
                 name={s.icon}
                 className="size-9 text-navy-900 group-hover:text-accent"
               />
-              <span className="font-display text-sm font-bold text-steel-400">
+              <span className="font-display text-sm font-bold text-steel-500">
                 {String(i + 1).padStart(2, "0")}
               </span>
             </div>

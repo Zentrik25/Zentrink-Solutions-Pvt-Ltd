@@ -1,4 +1,5 @@
 import { db } from "@/lib/server/db";
+import { log } from "@/lib/server/log";
 import { audit } from "@/lib/server/audit";
 import { randomToken } from "@/lib/server/crypto";
 import { authorize } from "@/lib/auth/session";
@@ -21,7 +22,7 @@ export async function uploadMedia(file: { name: string; type: string; size: numb
   try {
     stored = await publicStore().put(key, file.bytes, check.file.mime);
   } catch (e) {
-    console.error("media upload failed", String(e));
+    log("error", "media.upload_failed", {}, e);
     return { ok: false, error: "Storage is unavailable. The image was not saved." };
   }
   try {
@@ -49,7 +50,7 @@ export async function deleteMedia(id: string): Promise<Result> {
   const uses = m._count.services + m._count.industries + m._count.articles + m._count.projectUses;
   if (uses > 0) return { ok: false, error: `This image is used by ${uses} item(s). Remove it from them first.` };
   await db().media.delete({ where: { id } });
-  if (!m.key.startsWith("seed/")) await publicStore().remove(m.key).catch((e) => console.error("blob delete failed", String(e)));
+  if (!m.key.startsWith("seed/")) await publicStore().remove(m.key).catch((e) => log("warn", "media.blob_delete_failed", {}, e));
   await audit(user, "media.delete", "Media", id);
   revalidatePublicSite();
   return { ok: true };

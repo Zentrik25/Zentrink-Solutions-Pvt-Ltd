@@ -4,6 +4,7 @@ import { NAV, SITE, whatsappLink, WHATSAPP_DEFAULT_MESSAGE } from "@/lib/site";
 import { getContact, getIndustries, getServices } from "@/lib/data";
 import { Container } from "@/components/ui/container";
 import { Logo } from "@/components/ui/logo";
+import { CookieSettings } from "@/components/analytics/cookie-settings";
 
 const linkClass = "text-steel-300 hover:text-white";
 const headingClass = "mb-5 text-xs font-bold uppercase tracking-[0.2em] text-accent";
@@ -116,6 +117,7 @@ export async function Footer() {
               <Link href="/terms-of-use" className="hover:text-white">
                 Terms of Use
               </Link>
+              <CookieSettings className="hover:text-white" />
             </p>
           </div>
         </Container>

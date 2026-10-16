@@ -482,8 +482,108 @@ const SERVICE_IMAGES: Record<string, ServiceImage> = {
   },
 };
 
+/** Search titles/descriptions aimed at how Zimbabwean clients actually search; no unverifiable claims. */
+const SERVICE_SEO: Record<string, { title: string; description: string }> = {
+  "electrical-installations": {
+    title: "Electrical Installations Zimbabwe",
+    description:
+      "Electrical contractors in Zimbabwe for commercial, industrial and residential installations: distribution boards, wiring, earthing and testing, handed over with test records.",
+  },
+  "power-distribution": {
+    title: "Power Distribution Contractors Zimbabwe",
+    description:
+      "Design and installation of medium and low-voltage distribution networks, transformers and switchgear for mines, industry, estates and developments across Zimbabwe.",
+  },
+  "solar-energy": {
+    title: "Solar Installation Zimbabwe",
+    description:
+      "Solar PV, hybrid and battery storage systems sized to your load and installed with proper protection and commissioning, for businesses, farms and homes in Zimbabwe.",
+  },
+  "industrial-maintenance": {
+    title: "Industrial Electrical Maintenance Zimbabwe",
+    description:
+      "Planned inspection, fault finding and repair of switchgear, motors and distribution systems for Zimbabwean mines, factories and processing plants.",
+  },
+  "testing-commissioning": {
+    title: "Electrical Testing & Commissioning Zimbabwe",
+    description:
+      "Pre-energisation inspection, insulation, earthing and protection testing and commissioning records for electrical and solar installations in Zimbabwe.",
+  },
+  "electrical-procurement": {
+    title: "Electrical Equipment Procurement Zimbabwe",
+    description:
+      "Technical specification and sourcing of switchgear, cables, transformers and solar equipment for projects in Zimbabwe, checked against ratings and standards.",
+  },
+};
+
+/** Additional questions customers genuinely ask. Answers are general guidance, not claims about past work. */
+const EXTRA_FAQS: Record<string, { q: string; a: string }[]> = {
+  "electrical-installations": [
+    {
+      q: "What should I check before hiring an electrical contractor in Zimbabwe?",
+      a: "Ask for a written scope and quotation, who will design and supervise the work, how the installation will be inspected and tested before it is energised, what documentation you will receive at handover, and how defects after completion are handled. If a contractor claims a registration or licence, verify it with the issuing authority before relying on it.",
+    },
+    {
+      q: "How long does an electrical installation take?",
+      a: "It depends on size and access. Replacing a distribution board can take days, while wiring a multi-storey building runs for months alongside other trades. We give a programme after reviewing drawings and, where needed, visiting the site.",
+    },
+  ],
+  "power-distribution": [
+    {
+      q: "What is the difference between low-voltage and medium-voltage distribution?",
+      a: "Low-voltage networks, typically up to 1 kV, supply most buildings and machines directly. Medium-voltage networks, for example at 11 kV, carry power over longer distances or to large loads and need transformers to step the voltage down on site. The voltage you need depends on your load and the supply the utility can provide.",
+    },
+    {
+      q: "When does a site need its own transformer?",
+      a: "When demand exceeds what can be supplied at low voltage, or when the utility offers only a medium-voltage connection. A load study sets the required capacity, and the utility confirms the supply arrangement.",
+    },
+  ],
+  "solar-energy": [
+    {
+      q: "Is solar worth it for a business in Zimbabwe?",
+      a: "That depends on how much electricity you use during daylight, what you pay for it, and how much a supply interruption costs you. We compare your consumption and tariff with the cost of a system, and tell you plainly where the case is weak.",
+    },
+    {
+      q: "Do I need approval to install solar?",
+      a: "Requirements depend on system size and whether the system connects to the utility network; backup and off-grid systems are treated differently from grid-tied ones. Confirm the current requirements with the electricity utility and the energy regulator before you buy. We prepare the technical information that applications need.",
+    },
+  ],
+  "industrial-maintenance": [
+    {
+      q: "How often should industrial electrical equipment be inspected?",
+      a: "It depends on duty, environment and the manufacturer's recommendations. Thermal imaging and inspection of main switchgear is commonly done yearly, and more often in hot, dusty or humid sites or for critical plant. A condition survey sets an interval for each asset.",
+    },
+    {
+      q: "What does an electrical condition survey include?",
+      a: "A register of installed equipment, visual and thermal inspection, checks of protection and earthing, a record of defects ranked by safety and operational risk, and recommended actions.",
+    },
+  ],
+  "testing-commissioning": [
+    {
+      q: "Why test a new installation if it already works?",
+      a: "Working is not the same as safe. Tests find reversed polarity, poor earth continuity, damaged insulation and protection that would not clear a fault in time, none of which show up in normal use until something goes wrong.",
+    },
+    {
+      q: "What is an earth fault loop impedance test?",
+      a: "It measures how easily fault current can flow back to the source through the protective conductor. If the impedance is low enough, the breaker or fuse will disconnect quickly during a fault, limiting the danger of electric shock and fire.",
+    },
+  ],
+  "electrical-procurement": [
+    {
+      q: "What information do you need to source switchgear or a transformer?",
+      a: "Voltage and system earthing, load or capacity, prospective fault level, enclosure protection and environment, applicable standards, expected delivery date and site access. If you do not have all of this, we can help establish it from your load and supply details.",
+    },
+    {
+      q: "Can you help compare supplier quotations?",
+      a: "Yes. We compare ratings, standards, scope, delivery and support side by side so that quotations are judged like for like rather than on headline price alone.",
+    },
+  ],
+};
+
 export const SERVICES: Service[] = BASE_SERVICES.map((s) => ({
   ...s,
+  faqs: [...s.faqs, ...(EXTRA_FAQS[s.slug] ?? [])],
+  seo: SERVICE_SEO[s.slug],
   image: SERVICE_IMAGES[s.slug],
 }));
 

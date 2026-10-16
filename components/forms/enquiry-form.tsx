@@ -4,6 +4,7 @@ import { useActionState, useEffect, useRef, useState } from "react";
 import { CheckCircle2, Paperclip } from "lucide-react";
 import { submitEnquiryAction } from "@/lib/enquiry/actions";
 import { BUDGET_OPTIONS, type ServiceOption } from "@/lib/enquiry/constants";
+import { trackEvent } from "@/lib/analytics";
 import type { EnquiryActionState, EnquiryFieldName } from "@/lib/enquiry/schema";
 import { SubmitButton } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
@@ -65,12 +66,16 @@ export function EnquiryForm({
   const [token, setToken] = useState("");
   const [fileError, setFileError] = useState("");
   const formRef = useRef<HTMLFormElement>(null);
+  const lastService = useRef(defaultService);
   const values = state.values;
   const errors = state.errors;
 
-  // A fresh signed timestamp is fetched on load and after every failed attempt,
-  // so cached pages never carry a stale token.
+  // A signed timestamp is fetched when the visitor first interacts with the form (keeping
+  // the page load lean) and again after every failed attempt, so cached pages never carry a
+  // stale token.
+  const [interacted, setInteracted] = useState(false);
   useEffect(() => {
+    if (!interacted) return;
     let cancelled = false;
     fetch("/api/form-token", { cache: "no-store" })
       .then((r) => r.json())
@@ -79,7 +84,13 @@ export function EnquiryForm({
     return () => {
       cancelled = true;
     };
-  }, [state]);
+  }, [state, interacted]);
+
+  // Conversion event: carries only the form name and service slug, never personal details.
+  useEffect(() => {
+    if (state.status !== "success") return;
+    trackEvent("generate_lead", { form: "project_enquiry", service: lastService.current || "unspecified" });
+  }, [state.status]);
 
   const common = (id: EnquiryFieldName) => ({
     id,
@@ -118,7 +129,17 @@ export function EnquiryForm({
   }
 
   return (
-    <form ref={formRef} action={action} className="space-y-6" aria-label="Project enquiry form" noValidate={false}>
+    <form
+      ref={formRef}
+      action={action}
+      className="space-y-6"
+      aria-label="Project enquiry form"
+      onFocus={() => setInteracted(true)}
+      onChange={(e) => {
+        const t = e.target as unknown as HTMLSelectElement;
+        if (t.name === "service") lastService.current = t.value;
+      }}
+    >
       {state.status === "error" && (
         <div role="alert" className="border-l-4 border-red-700 bg-red-50 p-4 text-sm font-semibold text-red-800">
           {state.message}
@@ -241,7 +262,7 @@ export function EnquiryForm({
         )}
       </div>
 
-      <SubmitButton pending={pending || !token}>
+      <SubmitButton pending={pending}>
         {pending ? "Submitting..." : "Submit Project Enquiry"}
       </SubmitButton>
     </form>

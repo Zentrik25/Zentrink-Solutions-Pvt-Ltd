@@ -1,4 +1,5 @@
 import { Prisma } from "@/generated/prisma/client";
+import { log } from "@/lib/server/log";
 import { db } from "@/lib/server/db";
 import { env } from "@/lib/server/env";
 import { getSetting } from "@/lib/content/settings";
@@ -134,7 +135,7 @@ export async function processNotifications(opts: { limit?: number; ids?: string[
           data: { status: "PENDING", attempts: { decrement: 1 }, nextAttemptAt: new Date(Date.now() + 15 * 60_000), lastError: res.error },
         });
         summary.deferred++;
-        console.error("email provider not configured; notification deferred", { id });
+        log("warn", "email.provider_not_configured", { notificationId: id });
       } else {
         throw new Error(res.error);
       }
@@ -151,7 +152,7 @@ export async function processNotifications(opts: { limit?: number; ids?: string[
         },
       });
       summary.failed++;
-      console.error("email notification failed", { id, kind: n.kind, attempts: n.attempts, error: message });
+      log("error", "email.send_failed", { notificationId: id, kind: n.kind, attempts: n.attempts }, err);
     }
   }
   return summary;

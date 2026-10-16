@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { getIndustries } from "@/lib/data";
@@ -6,12 +7,12 @@ import { PageHero } from "@/components/ui/page-hero";
 import { Section } from "@/components/ui/section";
 import { CtaBand } from "@/components/ui/cta-band";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: "Industries We Serve",
   description:
     "Electrical engineering for mining, manufacturing, agriculture, construction, commercial buildings, residential developments and public infrastructure in Zimbabwe.",
-  alternates: { canonical: "/industries" },
-};
+  path: "/industries",
+});
 
 export default async function IndustriesPage() {
   const industries = await getIndustries();

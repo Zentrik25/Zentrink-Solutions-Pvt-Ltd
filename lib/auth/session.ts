@@ -5,7 +5,9 @@ import { db } from "@/lib/server/db";
 import { randomToken, sha256 } from "@/lib/server/crypto";
 import { can, type Permission } from "./permissions";
 
-export const SESSION_COOKIE = "zs_admin_session";
+// In production the cookie uses the `__Host-` prefix: browsers then guarantee it is Secure,
+// host-only (no Domain attribute, so never sent to subdomains) and scoped to path "/".
+export const SESSION_COOKIE = process.env.NODE_ENV === "production" ? "__Host-zs_admin_session" : "zs_admin_session";
 const SESSION_HOURS = 8;
 
 export type SessionUser = { id: string; email: string; name: string; role: AdminRole };
