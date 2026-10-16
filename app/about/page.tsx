@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { SITE } from "@/lib/site";
+import { TEAM } from "@/lib/team";
 import { PageHero } from "@/components/ui/page-hero";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { CtaBand } from "@/components/ui/cta-band";
@@ -136,6 +137,31 @@ export default function AboutPage() {
             </p>
           </div>
         </div>
+      </Section>
+
+      <Section tone="muted">
+        <SectionHeading eyebrow="Our engineers" title="The people behind the work" />
+        <ul className="mt-12 grid border-l border-t border-steel-300 bg-white md:grid-cols-3">
+          {TEAM.map((m) => (
+            <li key={m.name} className="border-b border-r border-steel-300 p-8">
+              <div
+                aria-hidden
+                className="flex size-16 items-center justify-center bg-navy-900 font-display text-xl font-black text-white"
+              >
+                {m.name
+                  .split(" ")
+                  .map((w) => w[0])
+                  .join("")}
+              </div>
+              <h3 className="mt-6 text-xl font-extrabold uppercase text-navy-900">{m.name}</h3>
+              <p className="mt-1 text-xs font-bold uppercase tracking-[0.18em] text-accent-strong">
+                {m.role}
+              </p>
+              {m.qualifications && <p className="mt-3 text-sm text-charcoal-700">{m.qualifications}</p>}
+              {m.bio && <p className="mt-3 leading-relaxed text-steel-600">{m.bio}</p>}
+            </li>
+          ))}
+        </ul>
       </Section>
 
       <Section tone="muted">
