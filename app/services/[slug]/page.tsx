@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, Check } from "lucide-react";
@@ -66,6 +67,16 @@ export default async function ServicePage({ params }: Props) {
       >
         <ButtonLink href={`/contact?service=${service.slug}`}>Request a Project Quote</ButtonLink>
       </PageHero>
+
+      <Image
+        src={service.image.src}
+        alt={service.image.alt}
+        width={service.image.width}
+        height={service.image.height}
+        priority
+        sizes="100vw"
+        className="aspect-[16/9] max-h-[32rem] w-full object-cover"
+      />
 
       <Section>
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr] lg:gap-20">

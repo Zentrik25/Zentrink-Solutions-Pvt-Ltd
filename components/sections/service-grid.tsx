@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { SERVICES } from "@/lib/services";
@@ -10,8 +11,17 @@ export function ServiceGrid() {
         <li key={s.slug} className="border-b border-r border-steel-300 bg-white">
           <Link
             href={`/services/${s.slug}`}
-            className="group flex h-full flex-col p-8 transition-colors hover:bg-navy-900"
+            className="group flex h-full flex-col transition-colors hover:bg-navy-900"
           >
+            <Image
+              src={s.image.src}
+              alt={s.image.alt}
+              width={s.image.width}
+              height={s.image.height}
+              sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+              className="aspect-[16/9] w-full object-cover"
+            />
+            <div className="flex flex-1 flex-col p-8">
             <div className="flex items-start justify-between">
               <ServiceIcon
                 name={s.icon}
@@ -31,6 +41,7 @@ export function ServiceGrid() {
               View service
               <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1" />
             </span>
+            </div>
           </Link>
         </li>
       ))}

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { SERVICES } from "@/lib/services";
@@ -31,11 +32,19 @@ export default function ServicesPage() {
             <li key={s.slug} className="border-b border-steel-300">
               <Link
                 href={`/services/${s.slug}`}
-                className="group grid gap-6 py-10 transition-colors hover:bg-steel-100 md:grid-cols-[4rem_1.1fr_1.6fr_auto] md:items-start md:px-4"
+                className="group grid gap-6 py-10 transition-colors hover:bg-steel-100 md:grid-cols-[4rem_14rem_1fr_1.4fr_auto] md:items-start md:px-4"
               >
                 <span className="font-display text-2xl font-black text-accent">
                   {String(i + 1).padStart(2, "0")}
                 </span>
+                <Image
+                  src={s.image.src}
+                  alt={s.image.alt}
+                  width={s.image.width}
+                  height={s.image.height}
+                  sizes="(min-width: 768px) 224px, 100vw"
+                  className="aspect-[16/9] w-full object-cover md:aspect-[4/3]"
+                />
                 <h2 className="flex items-start gap-4 text-2xl font-extrabold uppercase text-navy-900">
                   <ServiceIcon name={s.icon} className="mt-0.5 size-7 shrink-0" />
                   {s.title}

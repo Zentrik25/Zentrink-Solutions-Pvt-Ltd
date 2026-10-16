@@ -6,7 +6,10 @@ export type ServiceIcon =
   | "gauge"
   | "package";
 
+export type ServiceImage = { src: string; alt: string; width: number; height: number };
+
 export type Service = {
+  image: ServiceImage;
   slug: string;
   title: string;
   icon: ServiceIcon;
@@ -19,7 +22,7 @@ export type Service = {
   faqs: { q: string; a: string }[];
 };
 
-export const SERVICES: Service[] = [
+const BASE_SERVICES: Omit<Service, "image">[] = [
   {
     slug: "electrical-installations",
     title: "Electrical Installations",
@@ -437,6 +440,51 @@ export const SERVICES: Service[] = [
     ],
   },
 ];
+
+/** Illustrative photography only; not images of Zentrik Solutions projects. */
+const SERVICE_IMAGES: Record<string, ServiceImage> = {
+  "electrical-installations": {
+    src: "/images/electrician-installation.jpg",
+    alt: "Electrician in a hard hat and gloves working on an isolator and wiring",
+    width: 1800,
+    height: 1202,
+  },
+  "power-distribution-infrastructure": {
+    src: "/images/distribution-substation.jpg",
+    alt: "Electrical substation with insulators, busbars and overhead conductors against a blue sky",
+    width: 1800,
+    height: 1200,
+  },
+  "solar-energy-systems": {
+    src: "/images/solar-array.jpg",
+    alt: "Rows of ground-mounted solar PV panels in a field",
+    width: 1800,
+    height: 1198,
+  },
+  "industrial-electrical-maintenance": {
+    src: "/images/maintenance-testing-gloves.jpg",
+    alt: "Gloved technician measuring voltage with a multimeter inside an industrial electrical enclosure",
+    width: 1800,
+    height: 949,
+  },
+  "electrical-testing-and-commissioning": {
+    src: "/images/testing-probes.jpg",
+    alt: "Gloved hands testing contactor terminals with multimeter probes",
+    width: 1800,
+    height: 1350,
+  },
+  "electrical-equipment-procurement": {
+    src: "/images/control-panel.jpg",
+    alt: "Neatly wired control panel with PLC modules, power supplies and labelled terminals",
+    width: 1800,
+    height: 1200,
+  },
+};
+
+export const SERVICES: Service[] = BASE_SERVICES.map((s) => ({
+  ...s,
+  image: SERVICE_IMAGES[s.slug],
+}));
 
 export function getService(slug: string): Service | undefined {
   return SERVICES.find((s) => s.slug === slug);

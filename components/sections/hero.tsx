@@ -2,7 +2,7 @@ import { Mail, MapPin, Phone } from "lucide-react";
 import { SITE } from "@/lib/site";
 import { ButtonLink } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
-import { SingleLineDiagram } from "./single-line-diagram";
+import Image from "next/image";
 
 export function Hero() {
   return (
@@ -28,8 +28,16 @@ export function Hero() {
           </div>
         </div>
 
-        <div className="hidden border border-navy-700 lg:block">
-          <SingleLineDiagram className="h-auto w-full" />
+        <div className="border-b-4 border-accent">
+          <Image
+            src="/images/power-transformer.jpg"
+            alt="Power transformer and switchgear at an electrical substation"
+            width={1800}
+            height={1350}
+            priority
+            sizes="(min-width: 1024px) 40vw, 100vw"
+            className="aspect-[4/3] w-full object-cover lg:aspect-[4/5]"
+          />
         </div>
       </Container>
 
