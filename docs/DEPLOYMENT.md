@@ -3,11 +3,25 @@
 Nothing in this repository deploys itself to production. Every step below that changes DNS or
 production is performed deliberately by an authorised person.
 
+## 0. What the build needs (verified from a clean checkout)
+| Database state at build time | Result |
+|---|---|
+| `DATABASE_URL` missing | build fails |
+| Empty database (no migrations) | build fails (`Article` table does not exist) |
+| Migrated, **not seeded** | would build an **empty site** |
+| Migrated and seeded | builds (37 pages) |
+
+`scripts/vercel-build.sh` now runs `scripts/preflight.ts` before `next build` on Vercel production and preview builds. It **fails the build with a plain explanation** when `AUTH_SECRET` (32+ chars) is missing, `CRON_SECRET` (16+ chars, production) is missing, the database has pending migrations, or (production) it has no published content. Missing email/Blob settings only warn. `/api/health` also returns HTTP 503 `misconfigured` if `AUTH_SECRET`/`DATABASE_URL`/(production) `CRON_SECRET` are missing at runtime.
+
+**Plan requirement:** `vercel.json` schedules the email-retry cron every 10 minutes. Vercel's Hobby plan only allows daily crons and is expected to reject the deployment; use **Pro**, or change the schedule to `0 6 * * *`.
+
+**Node.js:** `package.json` pins `engines.node` to `22.x` (the version everything was tested on).
+
 ## 1. Services to provision
 | Need | Recommended managed service | Notes |
 |---|---|---|
-| PostgreSQL | **Neon** (Vercel Marketplace) | Gives a pooled and a direct URL, point-in-time restore, and per-preview **database branches**. Pick the region nearest the function region. |
-| Object storage | **Vercel Blob**: create **two stores** | One *public* (website images), one *private* (client documents). Separate tokens. |
+| PostgreSQL | **Neon** (Vercel Marketplace), **Postgres 16** | Gives a pooled and a direct URL, point-in-time restore, and per-preview **database branches**. Choose version 16 (the tested version). Pick the region nearest the function region. |
+| Object storage | **Vercel Blob**: create **two stores** | One *public* (website images), one *private* (client documents). Connect them with env prefixes **`BLOB_PUBLIC`** and **`BLOB_PRIVATE`** so the tokens are named `BLOB_PUBLIC_READ_WRITE_TOKEN` and `BLOB_PRIVATE_READ_WRITE_TOKEN` (the code requires these exact names and explicit tokens). |
 | Email | **Resend** | Verify the `zentriksolutions.com` sending domain (SPF + DKIM; add DMARC) before launch. |
 | Monitoring | Vercel Observability + an external uptime monitor | See OPERATIONS.md. |
 
@@ -56,5 +70,17 @@ Generate secrets with: `openssl rand -base64 48`.
 - DNS (at your registrar/DNS host; **do not change until launch is approved**): `A zentriksolutions.com -> 76.76.21.21` and `CNAME www -> cname.vercel-dns.com` (use the exact values Vercel shows for your project). HTTPS certificates are issued automatically once DNS resolves.
 - Verify ownership: Vercel may ask for a TXT record if the domain is attached to another account.
 
-## 6. After the preview is green
+## 6. Safe first-deployment sequence
+Steps marked **[approval]** must not be done without explicit written approval.
+
+1. Create the Vercel project (Pro plan), Neon project (Postgres 16) and the two Blob stores. Set the variables in section 3, keeping Preview and Production values separate.
+2. In Neon create a **staging branch**. Run `prisma migrate deploy` and `npm run db:seed` against it using its direct URL. Point the **Preview** scope at it. No production data is touched.
+3. Deploy a **preview** from a branch. Deployment Protection is on, so give the test runner a bypass secret (`x-vercel-protection-bypass`). Run `BASE_URL=<preview> node tests/e2e/run.mjs`. Confirm a real email arrives, an attachment reaches the private store, an image upload works, and `/api/health` with the cron secret shows every integration `true` and `configProblems: []`.
+4. **[approval]** Create the GitHub `production` environment (required reviewers) with secrets `PRODUCTION_DIRECT_URL` and `BACKUP_ENCRYPTION_PASSPHRASE`. Run **Release - database migration** against production. The backup is encrypted before upload (decrypt with `gpg --decrypt file.dump.gpg > file.dump`).
+5. **[approval]** Seed production once: `SEED_ADMIN_EMAIL=... SEED_ADMIN_PASSWORD=... DIRECT_URL=<prod direct> npm run db:seed`.
+6. **[approval]** Deploy to **Production** (preflight must pass). Verify it on its `.vercel.app` URL.
+7. **[approval]** Add `zentriksolutions.com` and `www.zentriksolutions.com` in Vercel; set www to redirect to the apex with 308.
+8. **[approval]** Change DNS last. Wait for the certificate. Verify both hostnames, re-run the e2e suite against production, submit the sitemap, change the seeded admin password.
+
+## 7. After the preview is green
 Follow RELEASE_CHECKLIST.md. Promotion to production requires explicit approval.

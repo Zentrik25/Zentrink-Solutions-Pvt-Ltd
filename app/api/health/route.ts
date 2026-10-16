@@ -3,6 +3,7 @@ import { db } from "@/lib/server/db";
 import { safeEqual } from "@/lib/server/crypto";
 import { env } from "@/lib/server/env";
 import { log } from "@/lib/server/log";
+import { configProblems } from "@/lib/server/config";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +11,8 @@ const NO_STORE = { "Cache-Control": "no-store" };
 
 /**
  * GET /api/health
- *   Public: liveness plus database connectivity. Reveals nothing else.
+ *   Public: liveness, database connectivity and whether critical secrets are configured
+ *   ("misconfigured" with HTTP 503 if not; variable names are never shown publicly).
  *   With `Authorization: Bearer $CRON_SECRET`: also reports integration configuration
  *   and email backlog so uptime monitors can alert on degraded delivery.
  */
@@ -28,13 +30,16 @@ export async function GET(request: Request) {
   const auth = request.headers.get("authorization") ?? "";
   const detailed = Boolean(secret) && safeEqual(auth, `Bearer ${secret}`);
 
+  const problems = configProblems();
   const body: Record<string, unknown> = {
-    status: database ? "ok" : "unavailable",
+    status: !database ? "unavailable" : problems.length ? "misconfigured" : "ok",
     database: database ? "ok" : "error",
     commit: process.env.VERCEL_GIT_COMMIT_SHA?.slice(0, 7) ?? null,
     environment: process.env.VERCEL_ENV ?? process.env.NODE_ENV,
     latencyMs: Date.now() - started,
   };
+
+  if (detailed) body.configProblems = problems;
 
   if (detailed && database) {
     const e = env();
@@ -54,11 +59,11 @@ export async function GET(request: Request) {
     // Degraded when mail is stuck for over 30 minutes or any send has permanently failed.
     const degraded = failed > 0 || backlogMinutes > 30 || !integrations.email;
     Object.assign(body, {
-      status: degraded ? "degraded" : "ok",
+      status: problems.length ? "misconfigured" : degraded ? "degraded" : "ok",
       email: { pending, failed, oldestUndeliveredMinutes: backlogMinutes },
       integrations,
     });
   }
 
-  return NextResponse.json(body, { status: database ? 200 : 503, headers: NO_STORE });
+  return NextResponse.json(body, { status: database && problems.length === 0 ? 200 : 503, headers: NO_STORE });
 }

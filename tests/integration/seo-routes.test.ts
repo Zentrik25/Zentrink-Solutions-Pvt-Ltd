@@ -115,3 +115,27 @@ describe("health endpoint", () => {
     expect((await res.json()).status).toBe("unavailable");
   });
 });
+
+describe("health reports missing critical configuration", () => {
+  it("returns 503 'misconfigured' publicly, without naming variables, when AUTH_SECRET is missing", async () => {
+    vi.stubEnv("AUTH_SECRET", "");
+    const res = await health(new Request("http://x/api/health"));
+    expect(res.status).toBe(503);
+    const body = await res.json();
+    expect(body.status).toBe("misconfigured");
+    expect(JSON.stringify(body)).not.toContain("AUTH_SECRET");
+  });
+  it("names the missing variables only with the cron secret", async () => {
+    vi.stubEnv("AUTH_SECRET", "short");
+    const res = await health(new Request("http://x", { headers: { authorization: `Bearer ${process.env.CRON_SECRET}` } }));
+    const body = await res.json();
+    expect(res.status).toBe(503);
+    expect(body.configProblems).toEqual(["AUTH_SECRET"]);
+  });
+  it("requires CRON_SECRET in production", async () => {
+    vi.stubEnv("VERCEL_ENV", "production");
+    vi.stubEnv("CRON_SECRET", "");
+    const res = await health(new Request("http://x/api/health"));
+    expect(res.status).toBe(503);
+  });
+});

@@ -7,7 +7,9 @@ Status column shows what was verified in the build sandbox (S) versus what must 
 - [ ] (V) Domain ownership confirmed; registrar access available
 - [ ] (V) Vercel project created; Git repo connected; Deployment Protection on for Previews
 - [ ] (V) Production and preview databases are **different**; preview uses a Neon branch
-- [ ] (V) Separate public and private Blob stores for production
+- [ ] (V) Separate public and private Blob stores for production, connected with env prefixes `BLOB_PUBLIC` / `BLOB_PRIVATE`
+- [ ] (V) Vercel plan is **Pro** (10-minute cron), or `vercel.json` schedule changed to daily
+- [ ] (V) Neon project created on **Postgres 16**; GitHub `production` environment with reviewers and secrets `PRODUCTION_DIRECT_URL`, `BACKUP_ENCRYPTION_PASSPHRASE`
 
 ## B. Configuration
 - [ ] (V) All variables in DEPLOYMENT.md set for the correct scopes

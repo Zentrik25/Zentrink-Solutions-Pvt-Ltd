@@ -4,7 +4,7 @@
 | Layer | What | How | Verified |
 |---|---|---|---|
 | Primary | Managed point-in-time recovery | Neon (history window depends on plan; confirm it covers your needs) | Must be verified on the live account |
-| Secondary | Portable logical dump | `DIRECT_URL=... ./scripts/backup.sh` (custom format, compressed, SHA-256, archive listing test). Runs automatically before every production migration in the release workflow | Yes (local) |
+| Secondary | Portable logical dump (**encrypted with GPG AES-256 in the release workflow**; decrypt with `gpg --decrypt x.dump.gpg > x.dump` and the `BACKUP_ENCRYPTION_PASSPHRASE`) | `DIRECT_URL=... ./scripts/backup.sh` (custom format, compressed, SHA-256, archive listing test). Runs automatically before every production migration in the release workflow | Yes (local) |
 | Files | Vercel Blob | Blob is durable storage but has no versioning. Export both stores periodically (`vercel blob` CLI or an API script) if client documents are business-critical | Not automated |
 
 **Restore test (do this before launch and quarterly):**

@@ -17,4 +17,7 @@ elif [ "${VERCEL_ENV:-}" = "production" ]; then
   echo "If this release changes the schema, run the 'Release - database migration' workflow BEFORE promoting."
 fi
 
+# Fail early, with a clear reason, instead of building a broken or empty site.
+npx tsx scripts/preflight.ts
+
 npx next build
