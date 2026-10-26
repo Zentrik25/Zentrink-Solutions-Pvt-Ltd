@@ -73,7 +73,7 @@ gtag('config','${GA_ID}',{allow_google_signals:false,allow_ad_personalization_si
         <div
           role="dialog"
           aria-label="Analytics cookies"
-          className="fixed inset-x-0 bottom-0 z-[90] border-t-4 border-accent bg-navy-950 p-5 text-white"
+          className="fixed inset-x-0 bottom-0 z-[90] border-t border-white/10 bg-navy-950 shadow-deep p-5 text-white"
         >
           <div className="mx-auto flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             <p className="max-w-3xl text-sm leading-relaxed text-steel-300">
@@ -88,14 +88,14 @@ gtag('config','${GA_ID}',{allow_google_signals:false,allow_ad_personalization_si
               <button
                 type="button"
                 onClick={() => writeConsent("denied")}
-                className="border-2 border-white px-5 py-2.5 text-sm font-bold uppercase tracking-wider hover:bg-white hover:text-navy-900"
+                className="rounded-sm border border-white/30 px-5 py-2.5 text-sm hover:bg-white/10"
               >
                 Decline
               </button>
               <button
                 type="button"
                 onClick={() => writeConsent("granted")}
-                className="border-2 border-accent bg-accent px-5 py-2.5 text-sm font-bold uppercase tracking-wider text-navy-950 hover:bg-accent-strong hover:text-white"
+                className="rounded-sm bg-accent px-5 py-2.5 text-sm text-navy-950 hover:bg-[#e8590c]"
               >
                 Accept
               </button>

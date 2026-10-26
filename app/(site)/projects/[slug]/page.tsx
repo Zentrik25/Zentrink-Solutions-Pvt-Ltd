@@ -72,13 +72,13 @@ export default async function ProjectPage({ params }: Props) {
             </div>
             {project.services.length > 0 && (
               <p className="mt-8 text-sm">
-                <span className="font-bold uppercase tracking-wider text-steel-500">Services: </span>
+                <span className="t-label text-steel-500">Services: </span>
                 {serviceLinks.map((svc, i) => {
                   if (!svc) return null;
                   return (
                     <span key={svc.slug}>
                       {i > 0 && ", "}
-                      <Link href={`/services/${svc.slug}`} className="font-bold text-navy-900 underline underline-offset-4">
+                      <Link href={`/services/${svc.slug}`} className="text-accent-strong underline underline-offset-4">
                         {svc.title}
                       </Link>
                     </span>
@@ -88,7 +88,7 @@ export default async function ProjectPage({ params }: Props) {
             )}
           </div>
           <div className="self-start">
-            <h2 className="border-t-4 border-navy-900 py-4 text-xs font-bold uppercase tracking-[0.2em] text-steel-500">
+            <h2 className="border-b border-steel-200 pb-3 t-label text-steel-500">
               Technical specifications
             </h2>
             <dl className="text-sm">
@@ -98,9 +98,9 @@ export default async function ProjectPage({ params }: Props) {
                 ...(project.client ? [["Client", project.client]] : []),
                 ...project.specifications.map((s) => [s.label, s.value]),
               ].map(([k, v]) => (
-                <div key={k} className="grid grid-cols-[9rem_1fr] gap-4 border-t border-steel-300 py-3">
-                  <dt className="font-bold text-steel-500">{k}</dt>
-                  <dd className="font-semibold text-navy-900">{v}</dd>
+                <div key={k} className="grid grid-cols-[9rem_1fr] gap-4 border-t border-steel-200 py-3">
+                  <dt className="text-steel-500">{k}</dt>
+                  <dd className="text-navy-950">{v}</dd>
                 </div>
               ))}
             </dl>

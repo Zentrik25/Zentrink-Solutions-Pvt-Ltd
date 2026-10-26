@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
-import { Mail, Menu, Phone, X } from "lucide-react";
+import { Menu, Phone, X } from "lucide-react";
 import { NAV, SITE } from "@/lib/site";
 import { cn } from "@/lib/cn";
 import { Logo } from "@/components/ui/logo";
@@ -36,31 +36,13 @@ export function Header({ contact }: { contact: HeaderContact }) {
   }, [open]);
 
   return (
-    <header className="sticky top-0 z-50 border-b border-steel-200 bg-white">
-      <div className="hidden bg-navy-950 text-xs text-steel-300 lg:block">
-        <Container className="flex h-9 items-center justify-between">
-          <p className="uppercase tracking-[0.18em]">
-            Electrical engineering &middot; Zimbabwe
-          </p>
-          <div className="flex items-center gap-6">
-            <a href={contact.phoneHref} className="flex items-center gap-2 hover:text-white">
-              <Phone aria-hidden className="size-3.5" />
-              {contact.phone}
-            </a>
-            <a href={`mailto:${contact.email}`} className="flex items-center gap-2 hover:text-white">
-              <Mail aria-hidden className="size-3.5" />
-              {contact.email}
-            </a>
-          </div>
-        </Container>
-      </div>
-
-      <Container className="flex h-[4.5rem] items-center justify-between">
-        <Link href="/" aria-label={`${SITE.shortName} home`}>
+    <header className="sticky top-0 z-50 border-b border-steel-200 bg-white/85 backdrop-blur-md">
+      <Container className="flex h-16 items-center justify-between gap-6">
+        <Link href="/" aria-label={`${SITE.shortName} home`} className="shrink-0">
           <Logo />
         </Link>
 
-        <nav aria-label="Primary" className="hidden items-center gap-1 lg:flex">
+        <nav aria-label="Primary" className="hidden items-center gap-0.5 lg:flex">
           {NAV.map((item) => {
             const active = isActive(pathname, item.href);
             return (
@@ -69,24 +51,29 @@ export function Header({ contact }: { contact: HeaderContact }) {
                 href={item.href}
                 aria-current={active ? "page" : undefined}
                 className={cn(
-                  "border-b-2 px-3 py-2 text-sm font-bold uppercase tracking-wider transition-colors",
-                  active
-                    ? "border-accent text-navy-900"
-                    : "border-transparent text-charcoal-700 hover:border-steel-300 hover:text-navy-900",
+                  "rounded-md px-3 py-2 text-sm transition-colors",
+                  active ? "bg-steel-100 text-navy-950" : "text-navy-950/80 hover:bg-steel-50 hover:text-navy-950",
                 )}
               >
                 {item.label}
               </Link>
             );
           })}
-          <ButtonLink href="/request-a-quote" className="ml-4 px-5 py-2.5">
+        </nav>
+
+        <div className="hidden items-center gap-4 lg:flex">
+          <a href={contact.phoneHref} className="flex items-center gap-2 text-sm text-navy-950/80 hover:text-navy-950">
+            <Phone aria-hidden className="size-4 text-accent-strong" />
+            <span className="tnum">{contact.phone}</span>
+          </a>
+          <ButtonLink href="/request-a-quote" className="min-h-10 px-4 py-2 text-sm">
             Request a Quote
           </ButtonLink>
-        </nav>
+        </div>
 
         <button
           type="button"
-          className="flex size-11 items-center justify-center border-2 border-navy-900 text-navy-900 lg:hidden"
+          className="flex size-11 items-center justify-center rounded-md border border-steel-200 text-navy-950 lg:hidden"
           aria-expanded={open}
           aria-controls="mobile-nav"
           aria-label={open ? "Close menu" : "Open menu"}
@@ -97,30 +84,24 @@ export function Header({ contact }: { contact: HeaderContact }) {
       </Container>
 
       {open && (
-        <div
-          id="mobile-nav"
-          className="fixed inset-x-0 top-[4.5rem] bottom-0 overflow-y-auto border-t border-steel-200 bg-white lg:hidden"
-        >
+        <div id="mobile-nav" className="absolute inset-x-0 top-full h-[calc(100dvh-4rem)] overflow-y-auto border-t border-steel-200 bg-white lg:hidden">
           <nav aria-label="Mobile" className="px-5 py-6 sm:px-8">
-            <ul className="border-t border-steel-200">
-              <li className="border-b border-steel-200">
+            <ul className="divide-y divide-steel-200 border-y border-steel-200">
+              <li>
                 <Link
                   href="/"
                   aria-current={pathname === "/" ? "page" : undefined}
-                  className="block py-4 text-lg font-bold uppercase tracking-wider text-navy-900"
+                  className="block py-4 text-lg text-navy-950"
                 >
                   Home
                 </Link>
               </li>
               {NAV.map((item) => (
-                <li key={item.href} className="border-b border-steel-200">
+                <li key={item.href}>
                   <Link
                     href={item.href}
                     aria-current={isActive(pathname, item.href) ? "page" : undefined}
-                    className={cn(
-                      "block py-4 text-lg font-bold uppercase tracking-wider",
-                      isActive(pathname, item.href) ? "text-accent-strong" : "text-navy-900",
-                    )}
+                    className={cn("block py-4 text-lg", isActive(pathname, item.href) ? "text-accent-strong" : "text-navy-950")}
                   >
                     {item.label}
                   </Link>
@@ -131,7 +112,7 @@ export function Header({ contact }: { contact: HeaderContact }) {
               <ButtonLink href="/request-a-quote">Request a Project Quote</ButtonLink>
               <a
                 href={contact.phoneHref}
-                className="flex items-center justify-center gap-2 border-2 border-navy-900 px-6 py-3.5 text-sm font-bold uppercase tracking-wider text-navy-900"
+                className="flex min-h-11 items-center justify-center gap-2 rounded-sm border border-steel-300 px-5 py-2.5 text-[0.9375rem] text-navy-950"
               >
                 <Phone aria-hidden className="size-4" />
                 {contact.phone}

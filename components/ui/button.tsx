@@ -5,17 +5,13 @@ import { cn } from "@/lib/cn";
 export type ButtonVariant = "primary" | "secondary" | "outline" | "outline-light";
 
 const base =
-  "inline-flex items-center justify-center gap-2 border-2 px-6 py-3.5 text-sm font-bold uppercase tracking-wider transition-colors duration-150 focus-visible:outline-offset-4";
+  "inline-flex min-h-11 items-center justify-center gap-2 rounded-sm border px-5 py-2.5 text-[0.9375rem] font-normal leading-none transition-colors duration-150";
 
 const variants: Record<ButtonVariant, string> = {
-  primary:
-    "border-accent bg-accent text-navy-950 hover:border-accent-strong hover:bg-accent-strong hover:text-white",
-  secondary:
-    "border-navy-900 bg-navy-900 text-white hover:border-navy-700 hover:bg-navy-700",
-  outline:
-    "border-navy-900 bg-transparent text-navy-900 hover:bg-navy-900 hover:text-white",
-  "outline-light":
-    "border-white bg-transparent text-white hover:bg-white hover:text-navy-900",
+  primary: "border-accent bg-accent text-navy-950 hover:border-[#e8590c] hover:bg-[#e8590c]",
+  secondary: "border-navy-950 bg-navy-950 text-white hover:border-navy-800 hover:bg-navy-800",
+  outline: "border-[#f2b999] bg-transparent text-accent-strong hover:bg-accent/[0.07]",
+  "outline-light": "border-white/30 bg-transparent text-white hover:bg-white/10",
 };
 
 type ButtonLinkProps = Omit<ComponentProps<typeof Link>, "className"> & {
@@ -24,12 +20,7 @@ type ButtonLinkProps = Omit<ComponentProps<typeof Link>, "className"> & {
   children: ReactNode;
 };
 
-export function ButtonLink({
-  variant = "primary",
-  className,
-  children,
-  ...props
-}: ButtonLinkProps) {
+export function ButtonLink({ variant = "primary", className, children, ...props }: ButtonLinkProps) {
   return (
     <Link className={cn(base, variants[variant], className)} {...props}>
       {children}
@@ -43,12 +34,7 @@ type ExternalButtonProps = Omit<ComponentProps<"a">, "className"> & {
 };
 
 /** Anchor styled as a button for tel:, mailto: and external (WhatsApp) links. */
-export function ExternalButton({
-  variant = "primary",
-  className,
-  children,
-  ...props
-}: ExternalButtonProps) {
+export function ExternalButton({ variant = "primary", className, children, ...props }: ExternalButtonProps) {
   return (
     <a className={cn(base, variants[variant], className)} {...props}>
       {children}
@@ -56,22 +42,12 @@ export function ExternalButton({
   );
 }
 
-export function SubmitButton({
-  children,
-  pending,
-}: {
-  children: ReactNode;
-  pending?: boolean;
-}) {
+export function SubmitButton({ children, pending }: { children: ReactNode; pending?: boolean }) {
   return (
     <button
       type="submit"
       disabled={pending}
-      className={cn(
-        base,
-        variants.primary,
-        "disabled:cursor-not-allowed disabled:opacity-60",
-      )}
+      className={cn(base, variants.primary, "disabled:cursor-not-allowed disabled:opacity-60")}
     >
       {children}
     </button>

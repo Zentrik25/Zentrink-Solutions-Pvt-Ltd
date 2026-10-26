@@ -16,17 +16,17 @@ export async function CtaBand({
   const contact = await getContact();
   const href = service ? `/request-a-quote?service=${service}` : "/request-a-quote";
   return (
-    <section className="border-t-4 border-accent bg-navy-950 py-16 text-white lg:py-20">
-      <Container className="grid items-center gap-10 lg:grid-cols-[1.4fr_1fr]">
+    <section className="relative overflow-hidden bg-navy-900 py-16 text-white lg:py-24">
+      <div aria-hidden className="pointer-events-none absolute inset-0">
+        <div className="bg-brand-gradient absolute -right-32 -top-40 h-[28rem] w-[34rem] -skew-y-[14deg] rounded-lg opacity-[0.22]" />
+        <div className="absolute -right-6 bottom-6 h-16 w-[26rem] -skew-y-[14deg] rounded-lg bg-white opacity-[0.05]" />
+      </div>
+      <Container className="relative grid items-center gap-10 lg:grid-cols-[1.4fr_1fr]">
         <div>
-          <h2 className="text-3xl font-extrabold uppercase leading-[1.05] sm:text-4xl lg:text-5xl">
-            {title}
-          </h2>
-          <p className="mt-5 max-w-2xl text-lg leading-relaxed text-steel-300">
-            {text}
-          </p>
+          <h2 className="t-h1 max-w-2xl !text-white">{title}</h2>
+          <p className="t-lead mt-4 max-w-xl text-white/70">{text}</p>
         </div>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-3 sm:max-w-sm">
           <ButtonLink href={href}>Request a Project Quote</ButtonLink>
           <ExternalButton
             variant="outline-light"

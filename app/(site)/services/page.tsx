@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import { pageMetadata } from "@/lib/seo";
 import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { pageMetadata } from "@/lib/seo";
 import { getServices } from "@/lib/data";
 import { PageHero } from "@/components/ui/page-hero";
 import { Section, SectionHeading } from "@/components/ui/section";
@@ -29,42 +29,43 @@ export default async function ServicesPage() {
       />
 
       <Section>
-        <ul className="border-t border-navy-900">
+        <ul className="space-y-6">
           {SERVICES.map((s, i) => (
-            <li key={s.slug} className="border-b border-steel-300">
+            <li key={s.slug}>
               <Link
                 href={`/services/${s.slug}`}
-                className="group grid gap-6 py-10 transition-colors hover:bg-steel-100 lg:grid-cols-[4rem_14rem_1fr_1.4fr_auto] lg:items-start lg:px-4"
+                className="group grid overflow-hidden rounded-lg border border-steel-200 bg-white transition-all duration-200 hover:-translate-y-0.5 hover:shadow-elevated md:grid-cols-[17rem_1fr] lg:grid-cols-[20rem_1fr_auto]"
               >
-                <span className="font-display text-2xl font-black text-accent">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
                 <Image
                   src={s.image.src}
                   alt={s.image.alt}
                   width={s.image.width}
                   height={s.image.height}
-                  sizes="(min-width: 1024px) 224px, 100vw"
-                  className="aspect-[16/9] w-full object-cover lg:aspect-[4/3]"
+                  sizes="(min-width: 1024px) 320px, (min-width: 768px) 272px, 100vw"
+                  className="aspect-[16/10] h-full w-full object-cover md:aspect-auto"
                 />
-                <h2 className="flex items-start gap-4 text-2xl font-extrabold uppercase text-navy-900">
-                  <ServiceIcon name={s.icon} className="mt-0.5 size-7 shrink-0" />
-                  {s.title}
-                </h2>
-                <div>
-                  <p className="leading-relaxed text-steel-600">{s.summary}</p>
-                  <ul className="mt-4 space-y-1.5 text-sm text-charcoal-700">
+                <div className="p-6 lg:p-8">
+                  <div className="flex items-center gap-3">
+                    <span className="t-label tnum text-steel-500">{String(i + 1).padStart(2, "0")}</span>
+                    <span className="flex size-8 items-center justify-center rounded-md bg-accent/10 text-accent-strong">
+                      <ServiceIcon name={s.icon} className="size-4" />
+                    </span>
+                  </div>
+                  <h2 className="t-h3 mt-3 text-navy-950">{s.title}</h2>
+                  <p className="mt-3 max-w-xl leading-relaxed text-steel-500">{s.summary}</p>
+                  <ul className="mt-5 space-y-1.5 text-[0.9rem] text-steel-600">
                     {s.scope.slice(0, 3).map((item) => (
                       <li key={item} className="flex gap-3">
-                        <span aria-hidden className="mt-2 size-1.5 shrink-0 bg-accent" />
+                        <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-xs bg-accent" />
                         {item}
                       </li>
                     ))}
                   </ul>
                 </div>
-                <span className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-accent-strong">
-                  Details
-                  <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1" />
+                <span className="flex items-end p-6 text-sm text-accent-strong lg:items-center lg:p-8">
+                  <span className="flex items-center gap-1.5">
+                    Details <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1" />
+                  </span>
                 </span>
               </Link>
             </li>
@@ -73,11 +74,7 @@ export default async function ServicesPage() {
       </Section>
 
       <Section tone="navy">
-        <SectionHeading
-          tone="navy"
-          eyebrow="How we work"
-          title="One delivery process across every service."
-        />
+        <SectionHeading tone="navy" eyebrow="How we work" title="One delivery process across every service." />
         <div className="mt-14">
           <ProcessSteps steps={DELIVERY_PROCESS} tone="dark" />
         </div>

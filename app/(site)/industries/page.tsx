@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import { pageMetadata } from "@/lib/seo";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { pageMetadata } from "@/lib/seo";
 import { getIndustries } from "@/lib/data";
 import { PageHero } from "@/components/ui/page-hero";
 import { Section } from "@/components/ui/section";
@@ -26,20 +26,18 @@ export default async function IndustriesPage() {
       />
 
       <Section>
-        <ul className="border-t border-navy-900">
+        <ul className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {industries.map((ind, i) => (
-            <li key={ind.slug} className="border-b border-steel-300">
+            <li key={ind.slug}>
               <Link
                 href={`/industries/${ind.slug}`}
-                className="group grid gap-4 py-8 hover:bg-steel-100 md:grid-cols-[4rem_1fr_2fr_auto] md:items-start md:px-4"
+                className="group flex h-full flex-col rounded-lg border border-steel-200 bg-white p-6 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-elevated"
               >
-                <span className="font-display text-2xl font-black text-accent">
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <h2 className="text-2xl font-extrabold uppercase text-navy-900">{ind.title}</h2>
-                <p className="leading-relaxed text-steel-600">{ind.summary}</p>
-                <span className="flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-accent-strong">
-                  View
+                <span className="t-label tnum text-steel-500">{String(i + 1).padStart(2, "0")}</span>
+                <h2 className="t-h3 mt-3 text-navy-950">{ind.title}</h2>
+                <p className="mt-3 flex-1 leading-relaxed text-steel-500">{ind.summary}</p>
+                <span className="mt-6 flex items-center gap-1.5 text-sm text-accent-strong">
+                  Explore {ind.title.toLowerCase()}
                   <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1" />
                 </span>
               </Link>

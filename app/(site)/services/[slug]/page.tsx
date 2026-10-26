@@ -6,7 +6,7 @@ import { notFound } from "next/navigation";
 import { ArrowRight, Check } from "lucide-react";
 import { getIndustriesForService, getService, getServices } from "@/lib/data";
 import { PageHero } from "@/components/ui/page-hero";
-import { Section, SectionHeading } from "@/components/ui/section";
+import { Card, Section, SectionHeading } from "@/components/ui/section";
 import { ButtonLink } from "@/components/ui/button";
 import { FaqList } from "@/components/ui/faq";
 import { CtaBand } from "@/components/ui/cta-band";
@@ -66,84 +66,67 @@ export default async function ServicePage({ params }: Props) {
           { label: "Services", href: "/services" },
           { label: service.title },
         ]}
+        aside={
+          <div className="overflow-hidden rounded-lg border border-white shadow-elevated">
+            <Image
+              src={service.image.src}
+              alt={service.image.alt}
+              width={service.image.width}
+              height={service.image.height}
+              fetchPriority="high"
+              loading="eager"
+              sizes="(min-width: 1024px) 460px, 100vw"
+              className="aspect-[4/3] w-full object-cover"
+            />
+          </div>
+        }
       >
         <ButtonLink href={`/request-a-quote?service=${service.slug}`}>Request a Project Quote</ButtonLink>
+        <ButtonLink href="/contact" variant="outline">
+          Talk to an engineer
+        </ButtonLink>
       </PageHero>
-
-      <Image
-        src={service.image.src}
-        alt={service.image.alt}
-        width={service.image.width}
-        height={service.image.height}
-        fetchPriority="high"
-        loading="eager"
-        sizes="100vw"
-        className="aspect-[16/9] max-h-[32rem] w-full object-cover"
-      />
 
       <Section>
         <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr] lg:gap-20">
           <div>
             <SectionHeading eyebrow="Technical overview" title="Overview" />
-            <div className="mt-8 space-y-5 text-lg leading-relaxed text-steel-600">
+            <div className="mt-6 space-y-5 text-[1.0625rem] leading-relaxed text-steel-500">
               {service.overview.map((p) => (
                 <p key={p}>{p}</p>
               ))}
             </div>
           </div>
-          <aside className="self-start border-t-4 border-accent bg-steel-100 p-8">
-            <ServiceIcon name={service.icon} className="size-10 text-navy-900" />
-            <h2 className="mt-6 text-sm font-bold uppercase tracking-[0.2em] text-steel-500">
-              Typical applications
-            </h2>
+          <Card elevated className="self-start p-6">
+            <span className="flex size-10 items-center justify-center rounded-md bg-accent/10 text-accent-strong">
+              <ServiceIcon name={service.icon} className="size-5" />
+            </span>
+            <h2 className="t-label mt-5 text-steel-500">Typical applications</h2>
             <ul className="mt-4 space-y-3">
               {service.applications.map((a) => (
-                <li key={a} className="flex gap-3 font-semibold text-navy-900">
-                  <span aria-hidden className="mt-2.5 size-1.5 shrink-0 bg-accent" />
+                <li key={a} className="flex gap-3 text-navy-950">
+                  <span aria-hidden className="mt-2 size-1.5 shrink-0 rounded-xs bg-accent" />
                   {a}
                 </li>
               ))}
             </ul>
-          </aside>
+          </Card>
         </div>
       </Section>
 
       <Section tone="muted">
         <SectionHeading eyebrow="Scope of services" title="What is included" />
-        <ul className="mt-12 grid gap-x-12 border-t border-navy-900 md:grid-cols-2">
+        <ul className="mt-12 grid gap-3 md:grid-cols-2">
           {service.scope.map((item) => (
-            <li key={item} className="flex gap-4 border-b border-steel-300 py-5">
-              <Check aria-hidden className="mt-0.5 size-5 shrink-0 text-accent-strong" />
-              <span className="leading-relaxed text-charcoal-800">{item}</span>
+            <li key={item} className="flex gap-3 rounded-md border border-steel-200 bg-white p-4">
+              <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-xs bg-accent/10 text-accent-strong">
+                <Check aria-hidden className="size-3.5" />
+              </span>
+              <span className="leading-relaxed text-steel-600">{item}</span>
             </li>
           ))}
         </ul>
       </Section>
-
-      {industries.length > 0 && (
-        <Section>
-          <div className="grid gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
-            <SectionHeading
-              eyebrow="Relevant industries"
-              title="Where this service is applied"
-              intro="The same engineering approach adapts to the conditions of each sector."
-            />
-            <ul className="border-t border-navy-900">
-              {industries.map((ind) => (
-                <li key={ind.slug} className="border-b border-steel-300">
-                  <Link
-                    href={`/industries/${ind.slug}`}
-                    className="group flex items-center justify-between gap-4 py-5 hover:bg-steel-100 sm:px-4"
-                  >
-                    <span className="text-lg font-extrabold uppercase text-navy-900">{ind.title}</span>
-                    <ArrowRight aria-hidden className="size-4 text-steel-500 group-hover:text-accent-strong" />
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </Section>
-      )}
 
       <Section tone="navy">
         <SectionHeading tone="navy" eyebrow="Process" title="How we deliver" />
@@ -152,8 +135,33 @@ export default async function ServicePage({ params }: Props) {
         </div>
       </Section>
 
-      <Section>
-        <div className="grid gap-12 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
+      {industries.length > 0 && (
+        <Section>
+          <div className="grid gap-10 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
+            <SectionHeading
+              eyebrow="Relevant industries"
+              title="Where this service is applied"
+              intro="The same engineering approach adapts to the conditions of each sector."
+            />
+            <ul className="grid gap-3 sm:grid-cols-2">
+              {industries.map((ind) => (
+                <li key={ind.slug}>
+                  <Link
+                    href={`/industries/${ind.slug}`}
+                    className="group flex items-center justify-between gap-4 rounded-md border border-steel-200 bg-white px-5 py-4 transition-all hover:-translate-y-0.5 hover:shadow-card"
+                  >
+                    <span className="text-navy-950">{ind.title}</span>
+                    <ArrowRight aria-hidden className="size-4 text-accent-strong transition-transform group-hover:translate-x-1" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </Section>
+      )}
+
+      <Section tone="muted">
+        <div className="grid gap-10 lg:grid-cols-[1fr_1.6fr] lg:gap-20">
           <SectionHeading
             eyebrow="FAQs"
             title="Common questions"
@@ -163,19 +171,22 @@ export default async function ServicePage({ params }: Props) {
         </div>
       </Section>
 
-      <Section tone="muted">
+      <Section>
         <SectionHeading eyebrow="Related services" title="Often specified together" />
         <ul className="mt-12 grid gap-6 md:grid-cols-3">
           {related.map((r) => (
-            <li key={r.slug} className="border border-steel-300 bg-white">
-              <Link href={`/services/${r.slug}`} className="group flex h-full flex-col p-6 hover:bg-navy-900">
-                <ServiceIcon name={r.icon} className="size-8 text-navy-900 group-hover:text-accent" />
-                <h3 className="mt-6 text-lg font-extrabold uppercase text-navy-900 group-hover:text-white">
-                  {r.title}
-                </h3>
-                <p className="mt-2 flex-1 text-steel-600 group-hover:text-steel-300">{r.summary}</p>
-                <span className="mt-6 flex items-center gap-2 text-sm font-bold uppercase tracking-wider text-accent-strong group-hover:text-accent">
-                  View service <ArrowRight aria-hidden className="size-4" />
+            <li key={r.slug}>
+              <Link
+                href={`/services/${r.slug}`}
+                className="group flex h-full flex-col rounded-lg border border-steel-200 bg-white p-6 transition-all hover:-translate-y-0.5 hover:shadow-elevated"
+              >
+                <span className="flex size-9 items-center justify-center rounded-md bg-accent/10 text-accent-strong">
+                  <ServiceIcon name={r.icon} className="size-5" />
+                </span>
+                <h3 className="t-h3 mt-5 text-navy-950">{r.title}</h3>
+                <p className="mt-2 flex-1 text-[0.9375rem] leading-relaxed text-steel-500">{r.summary}</p>
+                <span className="mt-5 flex items-center gap-1.5 text-sm text-accent-strong">
+                  View service <ArrowRight aria-hidden className="size-4 transition-transform group-hover:translate-x-1" />
                 </span>
               </Link>
             </li>
@@ -183,10 +194,7 @@ export default async function ServicePage({ params }: Props) {
         </ul>
       </Section>
 
-      <CtaBand
-        title={`Enquire about ${service.title.toLowerCase()}`}
-        service={service.slug}
-      />
+      <CtaBand title={`Enquire about ${service.title.toLowerCase()}`} service={service.slug} />
 
       <script
         type="application/ld+json"

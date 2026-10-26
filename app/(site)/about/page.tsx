@@ -90,7 +90,7 @@ export default async function AboutPage() {
       />
 
       <Section>
-        <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr] lg:gap-20">
+        <div className="grid gap-12 [&>*]:min-w-0 lg:grid-cols-[1.3fr_1fr] lg:gap-20">
           <div>
             <SectionHeading eyebrow="Company profile" title="Who we are" />
             <div className="mt-8 space-y-5 text-lg leading-relaxed text-steel-600">
@@ -106,7 +106,7 @@ export default async function AboutPage() {
               </p>
             </div>
           </div>
-          <dl className="self-start border-t-4 border-navy-900 text-sm">
+          <dl className="self-start rounded-lg border border-steel-200 bg-white p-6 shadow-card text-sm">
             {[
               ["Registered name", SITE.name],
               ["Industry", "Electrical engineering"],
@@ -114,9 +114,9 @@ export default async function AboutPage() {
               ["Telephone", contact.phone],
               ["Email", contact.email],
             ].map(([k, v]) => (
-              <div key={k} className="grid grid-cols-[8rem_1fr] gap-4 border-b border-steel-300 py-4">
-                <dt className="font-bold uppercase tracking-wider text-steel-500">{k}</dt>
-                <dd className="break-words font-semibold text-navy-900">{v}</dd>
+              <div key={k} className="grid grid-cols-[6.5rem_minmax(0,1fr)] sm:grid-cols-[8rem_minmax(0,1fr)] gap-4 border-b border-steel-200 py-4">
+                <dt className="t-label text-steel-500">{k}</dt>
+                <dd className="[overflow-wrap:anywhere] text-navy-950">{v}</dd>
               </div>
             ))}
           </dl>
@@ -126,15 +126,15 @@ export default async function AboutPage() {
       <Section tone="navy">
         <div className="grid gap-10 md:grid-cols-2 md:gap-0">
           <div className="md:border-r md:border-navy-700 md:pr-12">
-            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-accent">Mission</h2>
-            <p className="mt-5 text-2xl font-bold leading-snug sm:text-3xl">
+            <h2 className="t-label text-accent">Mission</h2>
+            <p className="mt-5 t-h2">
               To deliver safe, dependable and well-documented electrical engineering that clients can
               rely on for years.
             </p>
           </div>
           <div className="md:pl-12">
-            <h2 className="text-xs font-bold uppercase tracking-[0.2em] text-accent">Vision</h2>
-            <p className="mt-5 text-2xl font-bold leading-snug sm:text-3xl">
+            <h2 className="t-label text-accent">Vision</h2>
+            <p className="mt-5 t-h2">
               To be a trusted engineering partner for Zimbabwe&apos;s power, solar and industrial
               electrical projects.
             </p>
@@ -144,23 +144,23 @@ export default async function AboutPage() {
 
       <Section tone="muted">
         <SectionHeading eyebrow="Our engineers" title="The people behind the work" />
-        <ul className="mt-12 grid border-l border-t border-steel-300 bg-white md:grid-cols-3">
+        <ul className="mt-12 grid gap-5 md:grid-cols-3">
           {TEAM.map((m) => (
-            <li key={m.name} className="border-b border-r border-steel-300 p-8">
+            <li key={m.name} className="rounded-lg border border-steel-200 bg-white p-7 shadow-ambient">
               <div
                 aria-hidden
-                className="flex size-16 items-center justify-center bg-navy-900 font-display text-xl font-black text-white"
+                className="flex size-14 items-center justify-center rounded-md bg-navy-900 t-label text-white"
               >
                 {m.name
                   .split(" ")
                   .map((w) => w[0])
                   .join("")}
               </div>
-              <h3 className="mt-6 text-xl font-extrabold uppercase text-navy-900">{m.name}</h3>
-              <p className="mt-1 text-xs font-bold uppercase tracking-[0.18em] text-accent-strong">
+              <h3 className="mt-6 t-h3 text-navy-950">{m.name}</h3>
+              <p className="mt-1 t-label text-accent-strong">
                 {m.role}
               </p>
-              {m.qualifications && <p className="mt-3 text-sm text-charcoal-700">{m.qualifications}</p>}
+              {m.qualifications && <p className="mt-3 text-sm text-steel-600">{m.qualifications}</p>}
               {m.bio && <p className="mt-3 leading-relaxed text-steel-600">{m.bio}</p>}
             </li>
           ))}
@@ -169,10 +169,10 @@ export default async function AboutPage() {
 
       <Section tone="muted">
         <SectionHeading eyebrow="Values" title="What we hold ourselves to" />
-        <ul className="mt-12 grid border-l border-t border-steel-300 bg-white md:grid-cols-2 lg:grid-cols-3">
+        <ul className="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
           {VALUES.map((v) => (
-            <li key={v.title} className="border-b border-r border-steel-300 p-8">
-              <h3 className="text-xl font-extrabold uppercase text-navy-900">{v.title}</h3>
+            <li key={v.title} className="rounded-lg border border-steel-200 bg-white p-7 shadow-ambient">
+              <h3 className="t-h3 text-navy-950">{v.title}</h3>
               <p className="mt-3 leading-relaxed text-steel-600">{v.text}</p>
             </li>
           ))}
@@ -188,12 +188,12 @@ export default async function AboutPage() {
           />
           <ol className="border-t border-navy-900">
             {PHILOSOPHY.map((p, i) => (
-              <li key={p.title} className="grid grid-cols-[3.5rem_1fr] border-b border-steel-300 py-7">
-                <span className="font-display text-xl font-black text-accent">
+              <li key={p.title} className="grid grid-cols-[3.5rem_1fr] border-b border-steel-200 py-7">
+                <span className="t-label tnum text-accent-strong">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <div>
-                  <h3 className="text-lg font-extrabold uppercase text-navy-900">{p.title}</h3>
+                  <h3 className="t-h4 text-navy-950">{p.title}</h3>
                   <p className="mt-2 leading-relaxed text-steel-600">{p.text}</p>
                 </div>
               </li>
@@ -204,14 +204,14 @@ export default async function AboutPage() {
 
       <Section tone="charcoal">
         <SectionHeading tone="charcoal" eyebrow="Our commitments" title="Quality and safety" />
-        <div className="mt-12 grid gap-12 md:grid-cols-2">
+        <div className="mt-12 grid gap-6 md:grid-cols-2">
           {COMMITMENTS.map((c) => (
-            <div key={c.heading} className="border-t-4 border-accent pt-6">
-              <h3 className="text-2xl font-extrabold uppercase">{c.heading}</h3>
+            <div key={c.heading} className="rounded-lg border border-white/10 bg-white/5 p-6">
+              <h3 className="t-h3 !text-white">{c.heading}</h3>
               <ul className="mt-6 space-y-4">
                 {c.items.map((item) => (
-                  <li key={item} className="flex gap-4 leading-relaxed text-steel-300">
-                    <span aria-hidden className="mt-2.5 size-1.5 shrink-0 bg-accent" />
+                  <li key={item} className="flex gap-4 leading-relaxed text-white/75">
+                    <span aria-hidden className="mt-2.5 size-1.5 shrink-0 rounded-full bg-accent" />
                     {item}
                   </li>
                 ))}

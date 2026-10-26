@@ -57,19 +57,19 @@ export default async function ContactPage({ searchParams }: Props) {
       <Section>
         <div className="grid gap-14 lg:grid-cols-[1.6fr_1fr] lg:gap-20">
           <div>
-            <h2 className="mb-8 text-2xl font-extrabold uppercase text-navy-900 sm:text-3xl">
+            <h2 className="mb-8 t-h2 text-navy-950">
               Project enquiry
             </h2>
             <EnquiryForm serviceOptions={serviceOptions} defaultService={defaultService} />
           </div>
 
           <aside className="self-start">
-            <h2 className="border-t-4 border-navy-900 py-4 text-xs font-bold uppercase tracking-[0.2em] text-steel-500">
+            <h2 className="border-b border-steel-200 pb-3 t-label text-steel-500">
               Direct contact
             </h2>
             <ul>
               {channels.map((c) => (
-                <li key={c.label} className="border-t border-steel-300">
+                <li key={c.label} className="border-t border-steel-200">
                   <a
                     href={c.href}
                     {...(c.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
@@ -77,22 +77,22 @@ export default async function ContactPage({ searchParams }: Props) {
                   >
                     <c.icon aria-hidden className="mt-1 size-5 shrink-0 text-accent-strong" />
                     <span>
-                      <span className="block text-xs font-bold uppercase tracking-wider text-steel-500">
+                      <span className="block t-label text-steel-500">
                         {c.label}
                       </span>
-                      <span className="mt-1 block break-all font-bold text-navy-900">{c.value}</span>
+                      <span className="mt-1 block break-all text-navy-950">{c.value}</span>
                     </span>
                   </a>
                 </li>
               ))}
-              <li className="border-t border-steel-300">
+              <li className="border-t border-steel-200">
                 <div className="flex gap-4 py-5 sm:px-3">
                   <MapPin aria-hidden className="mt-1 size-5 shrink-0 text-accent-strong" />
                   <span>
-                    <span className="block text-xs font-bold uppercase tracking-wider text-steel-500">
+                    <span className="block t-label text-steel-500">
                       Coverage
                     </span>
-                    <span className="mt-1 block font-bold text-navy-900">
+                    <span className="mt-1 block text-navy-950">
                       Projects across {SITE.country}
                     </span>
                   </span>
@@ -100,9 +100,9 @@ export default async function ContactPage({ searchParams }: Props) {
               </li>
             </ul>
 
-            <div className="mt-8 border-l-4 border-accent bg-steel-100 p-6">
-              <h3 className="font-extrabold uppercase text-navy-900">What helps us quote</h3>
-              <ul className="mt-3 space-y-2 text-sm leading-relaxed text-charcoal-700">
+            <div className="mt-8 rounded-lg border border-steel-200 bg-steel-50 p-6">
+              <h3 className="t-h4 text-navy-950">What helps us quote</h3>
+              <ul className="mt-3 space-y-2 text-sm leading-relaxed text-steel-600">
                 <li>Site location and type of building or facility</li>
                 <li>Electrical drawings or load details, if available</li>
                 <li>Required completion date</li>

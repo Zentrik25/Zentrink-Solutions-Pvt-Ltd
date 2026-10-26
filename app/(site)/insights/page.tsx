@@ -91,10 +91,10 @@ export default async function InsightsPage({ searchParams }: Props) {
                   href={href({ q, category: c })}
                   aria-current={selected ? "true" : undefined}
                   className={cn(
-                    "border-2 px-4 py-2 text-xs font-bold uppercase tracking-wider",
+                    "rounded-sm border px-4 py-2 text-sm",
                     selected
                       ? "border-navy-900 bg-navy-900 text-white"
-                      : "border-steel-300 text-charcoal-700 hover:border-navy-900",
+                      : "border-steel-200 text-steel-600 hover:border-accent",
                   )}
                 >
                   {c ?? "All"}
@@ -115,11 +115,11 @@ export default async function InsightsPage({ searchParams }: Props) {
               defaultValue={q}
               maxLength={100}
               placeholder="Search articles"
-              className="min-w-0 flex-1 border-2 border-r-0 border-steel-300 px-4 py-3 text-base placeholder:text-steel-500 focus:border-navy-900 focus:outline-none"
+              className="min-w-0 flex-1 rounded-l-sm border border-r-0 border-steel-200 px-4 py-3 text-base placeholder:text-steel-500 focus:border-accent focus:outline-none"
             />
             <button
               type="submit"
-              className="flex items-center gap-2 border-2 border-navy-900 bg-navy-900 px-5 text-sm font-bold uppercase tracking-wider text-white hover:bg-navy-700"
+              className="flex items-center gap-2 rounded-r-sm bg-navy-950 px-5 text-sm text-white hover:bg-navy-800"
             >
               <Search aria-hidden className="size-4" />
               Search
@@ -134,30 +134,30 @@ export default async function InsightsPage({ searchParams }: Props) {
         </p>
 
         {items.length === 0 ? (
-          <div className="border border-steel-300 p-10">
-            <h2 className="text-2xl font-extrabold uppercase text-navy-900">No articles found</h2>
+          <div className="border border-steel-200 p-10">
+            <h2 className="t-h3 text-navy-950">No articles found</h2>
             <p className="mt-3 text-steel-600">
               Try a different search term or category.
             </p>
             <Link
               href="/insights"
-              className="mt-6 inline-block font-bold text-navy-900 underline decoration-accent decoration-2 underline-offset-4"
+              className="mt-6 inline-block text-accent-strong underline underline-offset-4"
             >
               View all articles
             </Link>
           </div>
         ) : (
-          <ul className="grid border-l border-t border-steel-300 md:grid-cols-2 lg:grid-cols-3">
+          <ul className="grid gap-5 md:grid-cols-2 lg:grid-cols-3">
             {items.map((a) => (
-              <li key={a.slug} className="border-b border-r border-steel-300">
+              <li key={a.slug}>
                 <Link
                   href={`/insights/${a.slug}`}
-                  className="group flex h-full flex-col p-8 hover:bg-steel-100"
+                  className="group flex h-full flex-col rounded-lg border border-steel-200 bg-white p-7 shadow-ambient transition-all hover:-translate-y-0.5 hover:shadow-elevated"
                 >
-                  <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent-strong">
+                  <p className="t-label text-accent-strong">
                     {a.category}
                   </p>
-                  <h2 className="mt-4 text-xl font-extrabold leading-tight text-navy-900 group-hover:text-accent-strong">
+                  <h2 className="mt-4 t-h3 text-navy-950 group-hover:text-accent-strong">
                     {a.title}
                   </h2>
                   <p className="mt-3 flex-1 leading-relaxed text-steel-600">{a.excerpt}</p>
@@ -179,7 +179,7 @@ export default async function InsightsPage({ searchParams }: Props) {
               <Link
                 href={href({ q, category, page: page - 1 })}
                 rel="prev"
-                className="border-2 border-steel-300 px-4 py-2 text-sm font-bold uppercase tracking-wider hover:border-navy-900"
+                className="rounded-sm border border-steel-200 px-4 py-2 text-sm hover:border-accent"
               >
                 Previous
               </Link>
@@ -191,10 +191,10 @@ export default async function InsightsPage({ searchParams }: Props) {
                 aria-current={n === page ? "page" : undefined}
                 aria-label={`Page ${n}`}
                 className={cn(
-                  "min-w-11 border-2 px-4 py-2 text-center text-sm font-bold",
+                  "min-w-11 rounded-sm border px-4 py-2 text-center text-sm",
                   n === page
                     ? "border-navy-900 bg-navy-900 text-white"
-                    : "border-steel-300 hover:border-navy-900",
+                    : "border-steel-200 hover:border-navy-900",
                 )}
               >
                 {n}
@@ -204,7 +204,7 @@ export default async function InsightsPage({ searchParams }: Props) {
               <Link
                 href={href({ q, category, page: page + 1 })}
                 rel="next"
-                className="border-2 border-steel-300 px-4 py-2 text-sm font-bold uppercase tracking-wider hover:border-navy-900"
+                className="rounded-sm border border-steel-200 px-4 py-2 text-sm hover:border-accent"
               >
                 Next
               </Link>

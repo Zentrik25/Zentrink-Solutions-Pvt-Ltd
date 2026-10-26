@@ -16,16 +16,16 @@ export function Breadcrumbs({ items }: { items: Crumb[] }) {
   };
   return (
     <nav aria-label="Breadcrumb" className="mb-8">
-      <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs font-semibold uppercase tracking-wider text-steel-400">
+      <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.8125rem] text-steel-500">
         {items.map((item, i) => (
           <li key={item.label} className="flex items-center gap-2">
-            {i > 0 && <span aria-hidden>/</span>}
+            {i > 0 && <span aria-hidden className="text-steel-400">/</span>}
             {item.href ? (
-              <Link href={item.href} className="hover:text-white">
+              <Link href={item.href} className="hover:text-navy-950">
                 {item.label}
               </Link>
             ) : (
-              <span aria-current="page" className="text-white">
+              <span aria-current="page" className="text-navy-950">
                 {item.label}
               </span>
             )}

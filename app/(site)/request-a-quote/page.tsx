@@ -43,17 +43,17 @@ export default async function RequestQuotePage({ searchParams }: Props) {
 
           <aside className="space-y-10 self-start">
             <div>
-              <h2 className="border-t-4 border-navy-900 py-4 text-xs font-bold uppercase tracking-[0.2em] text-steel-500">
+              <h2 className="border-b border-steel-200 pb-3 t-label text-steel-500">
                 What happens next
               </h2>
               <ol className="space-y-5">
                 {STEPS.map((s, i) => (
-                  <li key={s.title} className="grid grid-cols-[2.5rem_1fr] border-t border-steel-300 pt-5">
-                    <span className="font-display text-lg font-black text-accent-strong">
+                  <li key={s.title} className="grid grid-cols-[2.5rem_1fr] border-t border-steel-200 pt-5">
+                    <span className="t-label tnum text-accent-strong">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <div>
-                      <h3 className="font-extrabold uppercase text-navy-900">{s.title}</h3>
+                      <h3 className="t-h4 text-navy-950">{s.title}</h3>
                       <p className="mt-1 text-sm leading-relaxed text-steel-600">{s.text}</p>
                     </div>
                   </li>
@@ -61,9 +61,9 @@ export default async function RequestQuotePage({ searchParams }: Props) {
               </ol>
             </div>
 
-            <div className="border-l-4 border-accent bg-steel-100 p-6">
-              <h2 className="font-extrabold uppercase text-navy-900">Prefer to talk?</h2>
-              <ul className="mt-4 space-y-3 text-sm font-semibold text-navy-900">
+            <div className="rounded-lg border border-steel-200 bg-steel-50 p-6">
+              <h2 className="t-h4 text-navy-950">Prefer to talk?</h2>
+              <ul className="mt-4 space-y-3 text-sm text-navy-950">
                 <li>
                   <a href={contact.phoneHref} className="flex items-center gap-3 hover:text-accent-strong">
                     <Phone aria-hidden className="size-4" />

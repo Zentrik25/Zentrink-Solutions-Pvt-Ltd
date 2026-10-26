@@ -7,7 +7,7 @@ import { cn } from "@/lib/cn";
  */
 export function Logo({ tone = "dark", className }: { tone?: "dark" | "light"; className?: string }) {
   return (
-    <span className={cn("inline-flex", tone === "light" && "bg-white p-3", className)}>
+    <span className={cn("inline-flex", tone === "light" && "rounded-md bg-white p-3", className)}>
       <Image
         src="/logo.png"
         alt="Zentrik Solutions (Pvt) Ltd"

@@ -10,7 +10,7 @@ import { SubmitButton } from "@/components/ui/button";
 import { cn } from "@/lib/cn";
 
 const inputClass =
-  "w-full border-2 border-steel-300 bg-white px-4 py-3 text-base text-charcoal-800 placeholder:text-steel-500 focus:border-navy-900 focus:outline-none aria-[invalid=true]:border-red-700";
+  "w-full rounded-md border border-steel-300 bg-white px-3.5 py-2.5 text-base text-navy-950 placeholder:text-steel-500 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/30 aria-[invalid=true]:border-red-700";
 
 const MAX_FILES = 3;
 const MAX_FILE = 3 * 1024 * 1024;
@@ -33,7 +33,7 @@ function Field({
 }) {
   return (
     <div>
-      <label htmlFor={id} className="mb-2 block text-sm font-bold text-navy-900">
+      <label htmlFor={id} className="mb-1.5 block text-sm font-medium text-steel-600">
         {label}
         {required ? (
           <span className="text-accent-strong" aria-hidden>
@@ -46,7 +46,7 @@ function Field({
       {children}
       {hint && !error && <p className="mt-1.5 text-sm text-steel-500">{hint}</p>}
       {error && (
-        <p id={`${id}-error`} className="mt-1.5 text-sm font-semibold text-red-700">
+        <p id={`${id}-error`} className="mt-1.5 text-sm text-red-700">
           {error}
         </p>
       )}
@@ -112,14 +112,14 @@ export function EnquiryForm({
 
   if (state.status === "success") {
     return (
-      <div role="status" className="border-l-4 border-accent bg-steel-100 p-8">
+      <div role="status" className="rounded-lg border border-steel-200 bg-steel-50 p-8">
         <CheckCircle2 aria-hidden className="size-8 text-accent-strong" />
-        <h3 className="mt-4 text-2xl font-extrabold uppercase text-navy-900">Enquiry received</h3>
-        <p className="mt-3 text-lg text-charcoal-800">
+        <h3 className="t-h3 mt-4 text-navy-950">Enquiry received</h3>
+        <p className="mt-3 text-lg text-steel-600">
           Your reference number is{" "}
-          <strong className="font-display text-xl text-navy-900">{state.reference}</strong>.
+          <strong className="tnum font-medium text-navy-950">{state.reference}</strong>.
         </p>
-        <p className="mt-3 leading-relaxed text-charcoal-700">
+        <p className="mt-3 leading-relaxed text-steel-600">
           Your enquiry has been saved and our team has been notified. We will also send a confirmation
           email to the address you gave; if it does not arrive within a few minutes, check your spam
           folder. Quote this reference in any correspondence.
@@ -141,12 +141,12 @@ export function EnquiryForm({
       }}
     >
       {state.status === "error" && (
-        <div role="alert" className="border-l-4 border-red-700 bg-red-50 p-4 text-sm font-semibold text-red-800">
+        <div role="alert" className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-800">
           {state.message}
         </div>
       )}
       {state.status === "invalid" && (
-        <div role="alert" className="border-l-4 border-red-700 bg-red-50 p-4 text-sm font-semibold text-red-800">
+        <div role="alert" className="rounded-md border border-red-200 bg-red-50 p-4 text-sm text-red-800">
           Please correct the highlighted fields and submit again.
         </div>
       )}
@@ -215,7 +215,7 @@ export function EnquiryForm({
         error={errors.documents ?? fileError}
         hint="Drawings, photos or specifications. PDF, JPG, PNG, DOCX or XLSX. Up to 3 files, 4 MB in total."
       >
-        <div className="flex items-center gap-3 border-2 border-dashed border-steel-300 p-4">
+        <div className="flex items-center gap-3 rounded-md border border-dashed border-steel-300 bg-steel-50 p-4">
           <Paperclip aria-hidden className="size-5 shrink-0 text-steel-500" />
           <input
             id="documents"
@@ -226,7 +226,7 @@ export function EnquiryForm({
             onChange={onFiles}
             aria-invalid={errors.documents || fileError ? true : undefined}
             aria-describedby={errors.documents || fileError ? "documents-error" : undefined}
-            className="w-full text-sm file:mr-4 file:border-0 file:bg-navy-900 file:px-4 file:py-2 file:text-xs file:font-bold file:uppercase file:tracking-wider file:text-white"
+            className="w-full text-sm text-navy-950 file:mr-4 file:cursor-pointer file:rounded-sm file:border-0 file:bg-navy-950 file:px-4 file:py-2 file:text-sm file:font-normal file:text-white"
           />
         </div>
       </Field>
@@ -238,7 +238,7 @@ export function EnquiryForm({
       </div>
 
       <div>
-        <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-charcoal-700">
+        <label className="flex cursor-pointer items-start gap-3 text-sm leading-relaxed text-steel-600">
           <input
             {...common("consent")}
             type="checkbox"
@@ -256,7 +256,7 @@ export function EnquiryForm({
           </span>
         </label>
         {errors.consent && (
-          <p id="consent-error" className="mt-1.5 text-sm font-semibold text-red-700">
+          <p id="consent-error" className="mt-1.5 text-sm text-red-700">
             {errors.consent}
           </p>
         )}

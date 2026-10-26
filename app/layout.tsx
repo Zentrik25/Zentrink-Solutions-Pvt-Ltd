@@ -1,20 +1,21 @@
 import type { Metadata, Viewport } from "next";
-import { Archivo, Inter } from "next/font/google";
+import { Inter, Source_Code_Pro } from "next/font/google";
 import "./globals.css";
 import { SITE } from "@/lib/site";
 import { getSeo } from "@/lib/data";
 import { isIndexable } from "@/lib/seo";
 
-const heading = Archivo({
-  variable: "--font-heading",
-  subsets: ["latin"],
-  weight: ["600", "700", "800", "900"],
-  display: "swap",
-});
-
 const body = Inter({
   variable: "--font-body",
   subsets: ["latin"],
+  weight: ["300", "400", "500"],
+  display: "swap",
+});
+
+const code = Source_Code_Pro({
+  variable: "--font-code",
+  subsets: ["latin"],
+  weight: ["400", "500"],
   display: "swap",
 });
 
@@ -42,14 +43,14 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export const viewport: Viewport = {
-  themeColor: "#0b1f3a",
+  themeColor: "#0d253d",
   width: "device-width",
   initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${heading.variable} ${body.variable}`}>
+    <html lang="en" className={`${body.variable} ${code.variable}`}>
       <body className="flex min-h-screen flex-col">{children}</body>
     </html>
   );

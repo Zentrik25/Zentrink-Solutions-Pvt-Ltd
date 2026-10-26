@@ -78,14 +78,14 @@ export default async function ArticlePage({ params }: Props) {
 
       <Section>
         <article className="mx-auto max-w-3xl">
-          <p className="border-l-4 border-accent pl-6 text-xl leading-relaxed text-charcoal-700">
+          <p className="t-lead border-l-2 border-accent pl-6">
             {article.excerpt}
           </p>
-          <div className="mt-10 space-y-6 text-lg leading-relaxed text-charcoal-800">
+          <div className="mt-10 space-y-6 text-[1.0625rem] leading-relaxed text-steel-600">
             {article.body.map((block, i) => {
               if (block.type === "h2")
                 return (
-                  <h2 key={i} className="!mt-12 text-2xl font-extrabold uppercase text-navy-900">
+                  <h2 key={i} className="!mt-12 t-h3 text-navy-950">
                     {block.text}
                   </h2>
                 );
@@ -94,7 +94,7 @@ export default async function ArticlePage({ params }: Props) {
                   <ul key={i} className="space-y-3">
                     {block.items.map((item) => (
                       <li key={item} className="flex gap-4">
-                        <span aria-hidden className="mt-3 size-1.5 shrink-0 bg-accent" />
+                        <span aria-hidden className="mt-2.5 size-1.5 shrink-0 rounded-full bg-accent" />
                         {item}
                       </li>
                     ))}
@@ -103,7 +103,7 @@ export default async function ArticlePage({ params }: Props) {
               return <p key={i}>{block.text}</p>;
             })}
           </div>
-          <p className="mt-12 border-t border-steel-300 pt-6 text-sm text-steel-600">
+          <p className="mt-12 border-t border-steel-200 pt-6 text-sm text-steel-600">
             This article is general technical guidance. Every installation differs, so design
             decisions should be confirmed against the site conditions and the applicable standards.
           </p>
@@ -111,15 +111,15 @@ export default async function ArticlePage({ params }: Props) {
       </Section>
 
       <Section tone="muted">
-        <h2 className="text-2xl font-extrabold uppercase text-navy-900">More articles</h2>
-        <ul className="mt-8 grid border-l border-t border-steel-300 bg-white md:grid-cols-3">
+        <h2 className="t-h3 text-navy-950">More articles</h2>
+        <ul className="mt-8 grid gap-5 md:grid-cols-3">
           {more.map((a) => (
-            <li key={a.slug} className="border-b border-r border-steel-300">
-              <Link href={`/insights/${a.slug}`} className="group block h-full p-6 hover:bg-navy-900">
-                <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent-strong group-hover:text-accent">
+            <li key={a.slug}>
+              <Link href={`/insights/${a.slug}`} className="group block h-full rounded-lg border border-steel-200 p-6 transition-shadow hover:shadow-elevated">
+                <p className="t-label text-accent-strong group-hover:text-accent">
                   {a.category}
                 </p>
-                <h3 className="mt-3 text-lg font-extrabold leading-tight text-navy-900 group-hover:text-white">
+                <h3 className="mt-3 t-h4 text-navy-950 group-hover:text-accent-strong">
                   {a.title}
                 </h3>
               </Link>

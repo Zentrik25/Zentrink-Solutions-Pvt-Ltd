@@ -6,29 +6,27 @@ import { Container } from "@/components/ui/container";
 import { Logo } from "@/components/ui/logo";
 import { CookieSettings } from "@/components/analytics/cookie-settings";
 
-const linkClass = "text-steel-300 hover:text-white";
-const headingClass = "mb-5 text-xs font-bold uppercase tracking-[0.2em] text-accent";
+const link = "text-white/70 transition-colors hover:text-white";
+const heading = "t-label mb-5 text-white/50";
 
 export async function Footer() {
   const [SERVICES, INDUSTRIES, contact] = await Promise.all([getServices(), getIndustries(), getContact()]);
   return (
-    <footer className="bg-charcoal-900 text-white">
-      <Container className="grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.5fr_1fr_1fr_1.2fr]">
+    <footer className="bg-navy-950 text-white">
+      <Container className="grid gap-12 py-16 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1.2fr]">
         <div>
-          <Link href="/" aria-label={`${SITE.shortName} home`}>
+          <Link href="/" aria-label={`${SITE.shortName} home`} className="inline-block">
             <Logo tone="light" />
           </Link>
-          <p className="mt-6 max-w-sm leading-relaxed text-steel-300">
-            {SITE.description}
-          </p>
+          <p className="mt-6 max-w-sm text-[0.9375rem] leading-relaxed text-white/70">{SITE.description}</p>
         </div>
 
         <nav aria-label="Services">
-          <h2 className={headingClass}>Services</h2>
+          <h2 className={heading}>Services</h2>
           <ul className="space-y-3 text-sm">
             {SERVICES.map((s) => (
               <li key={s.slug}>
-                <Link href={`/services/${s.slug}`} className={linkClass}>
+                <Link href={`/services/${s.slug}`} className={link}>
                   {s.title}
                 </Link>
               </li>
@@ -36,32 +34,30 @@ export async function Footer() {
           </ul>
         </nav>
 
-        <div className="grid gap-12">
-          <nav aria-label="Company">
-            <h2 className={headingClass}>Company</h2>
-            <ul className="space-y-3 text-sm">
-              {NAV.map((n) => (
-                <li key={n.href}>
-                  <Link href={n.href} className={linkClass}>
-                    {n.label}
-                  </Link>
-                </li>
-              ))}
-              <li>
-                <Link href="/request-a-quote" className={linkClass}>
-                  Request a Quote
+        <nav aria-label="Company">
+          <h2 className={heading}>Company</h2>
+          <ul className="space-y-3 text-sm">
+            {NAV.map((n) => (
+              <li key={n.href}>
+                <Link href={n.href} className={link}>
+                  {n.label}
                 </Link>
               </li>
-            </ul>
-          </nav>
-        </div>
+            ))}
+            <li>
+              <Link href="/request-a-quote" className={link}>
+                Request a Quote
+              </Link>
+            </li>
+          </ul>
+        </nav>
 
         <div>
-          <h2 className={headingClass}>Contact</h2>
-          <ul className="space-y-4 text-sm text-steel-300">
+          <h2 className={heading}>Contact</h2>
+          <ul className="space-y-4 text-sm text-white/70">
             <li className="flex gap-3">
               <Phone aria-hidden className="mt-0.5 size-4 shrink-0 text-accent" />
-              <a href={contact.phoneHref} className="hover:text-white">
+              <a href={contact.phoneHref} className="tnum hover:text-white">
                 {contact.phone}
               </a>
             </li>
@@ -90,12 +86,10 @@ export async function Footer() {
         </div>
       </Container>
 
-      <div className="border-t border-charcoal-700">
-        <Container className="grid gap-6 py-8 text-sm text-steel-400 lg:grid-cols-[1fr_auto] lg:items-start">
+      <div className="border-t border-white/10">
+        <Container className="grid gap-6 py-8 text-sm text-white/55 lg:grid-cols-[1fr_auto] lg:items-start">
           <div>
-            <h2 className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-steel-300">
-              Industries served
-            </h2>
+            <h2 className="t-label mb-3 text-white/50">Industries served</h2>
             <ul className="flex flex-wrap gap-x-5 gap-y-2">
               {INDUSTRIES.map((i) => (
                 <li key={i.slug}>
@@ -110,7 +104,7 @@ export async function Footer() {
             <p>
               &copy; {new Date().getFullYear()} {SITE.name}. All rights reserved.
             </p>
-            <p className="mt-2 flex gap-5 lg:justify-end">
+            <p className="mt-2 flex flex-wrap gap-5 lg:justify-end">
               <Link href="/privacy-policy" className="hover:text-white">
                 Privacy Policy
               </Link>

@@ -42,7 +42,7 @@ export default async function ProjectsPage({ searchParams }: Props) {
         {PROJECTS.length === 0 ? (
           <div className="grid gap-12 lg:grid-cols-[1.3fr_1fr] lg:gap-20">
             <div>
-              <h2 className="text-3xl font-extrabold uppercase leading-tight text-navy-900 sm:text-4xl">
+              <h2 className="t-h2 text-navy-950">
                 Verified case studies are being prepared.
               </h2>
               <p className="mt-6 max-w-2xl text-lg leading-relaxed text-steel-600">
@@ -57,13 +57,13 @@ export default async function ProjectsPage({ searchParams }: Props) {
                 </ButtonLink>
               </div>
             </div>
-            <div className="self-start border-t-4 border-navy-900">
-              <h3 className="py-4 text-xs font-bold uppercase tracking-[0.2em] text-steel-500">
+            <div className="self-start rounded-lg border border-steel-200 bg-white p-6 shadow-card">
+              <h3 className="py-4 t-label text-steel-500">
                 Project categories
               </h3>
               <ul>
                 {PROJECT_CATEGORIES.map((c) => (
-                  <li key={c} className="border-t border-steel-300 py-4 font-bold text-navy-900">
+                  <li key={c} className="border-t border-steel-200 py-4 text-navy-950">
                     {c}
                   </li>
                 ))}
@@ -81,10 +81,10 @@ export default async function ProjectsPage({ searchParams }: Props) {
                     href={c ? `/projects?category=${encodeURIComponent(c)}` : "/projects"}
                     aria-current={selected ? "true" : undefined}
                     className={cn(
-                      "border-2 px-4 py-2 text-xs font-bold uppercase tracking-wider",
+                      "rounded-sm border px-4 py-2 text-sm",
                       selected
                         ? "border-navy-900 bg-navy-900 text-white"
-                        : "border-steel-300 text-charcoal-700 hover:border-navy-900",
+                        : "border-steel-200 text-steel-600 hover:border-accent",
                     )}
                   >
                     {c ?? "All"}
@@ -97,7 +97,7 @@ export default async function ProjectsPage({ searchParams }: Props) {
             ) : (
               <ul className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
                 {visible.map((p) => (
-                  <li key={p.slug} className="border border-steel-300">
+                  <li key={p.slug} className="border border-steel-200">
                     <Link href={`/projects/${p.slug}`} className="group block">
                       {p.gallery[0] && (
                         <Image
@@ -110,10 +110,10 @@ export default async function ProjectsPage({ searchParams }: Props) {
                         />
                       )}
                       <div className="p-6">
-                        <p className="text-xs font-bold uppercase tracking-[0.18em] text-accent-strong">
+                        <p className="t-label text-accent-strong">
                           {p.category}
                         </p>
-                        <h2 className="mt-2 text-xl font-extrabold uppercase text-navy-900 group-hover:text-accent-strong">
+                        <h2 className="mt-2 t-h3 text-navy-950 group-hover:text-accent-strong">
                           {p.title}
                         </h2>
                         <p className="mt-2 text-sm text-steel-600">

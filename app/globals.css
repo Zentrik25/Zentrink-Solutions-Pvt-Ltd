@@ -1,38 +1,57 @@
 @import "tailwindcss";
 
+/*
+ * Design system: adapted from the Stripe design reference.
+ *  - Light-weight display type with progressive negative tracking
+ *  - Deep navy ink for headings, slate for body text
+ *  - Conservative 4-8px radii (never pills)
+ *  - Layered, blue-tinted shadows for elevation
+ *  - White sections alternating with a dark brand section
+ * Zentrik navy and orange replace Stripe's indigo and purple so the logo and brand stay intact.
+ */
 @theme {
-  --color-navy-950: #07142a;
-  --color-navy-900: #0b1f3a;
-  --color-navy-800: #10294c;
-  --color-navy-700: #1a3a66;
+  /* Ink and dark brand surfaces */
+  --color-navy-950: #061b31; /* headings (deep navy ink) */
+  --color-navy-900: #0d253d; /* dark brand sections */
+  --color-navy-800: #163554;
+  --color-navy-700: #234767;
 
-  --color-charcoal-900: #171b20;
-  --color-charcoal-800: #1f242b;
-  --color-charcoal-700: #2b323a;
+  /* Legacy "charcoal" names now map to label/ink tones */
+  --color-charcoal-900: #061b31;
+  --color-charcoal-800: #273951; /* labels, strong body */
+  --color-charcoal-700: #3b4d66;
 
-  --color-steel-50: #f7f8fa;
-  --color-steel-100: #f0f2f5;
-  --color-steel-200: #e1e5ea;
-  --color-steel-300: #c9d0d8;
-  --color-steel-400: #9aa5b1;
-  --color-steel-500: #5f6b79;
-  --color-steel-600: #4f5b69;
+  /* Neutral scale: surfaces, borders, body text */
+  --color-steel-50: #f6f9fc;
+  --color-steel-100: #f0f5fa;
+  --color-steel-200: #e5edf5; /* default border */
+  --color-steel-300: #d3deea;
+  --color-steel-400: #8fa0b5;
+  --color-steel-500: #5b6b82; /* body text (AA on white and on #f6f9fc) */
+  --color-steel-600: #46566d;
 
-  --color-accent: #f26a1b;
-  --color-accent-strong: #c2410c;
+  /* Brand accent */
+  --color-accent: #f26a1b; /* CTA fill, decorative, accents on dark */
+  --color-accent-strong: #c2410c; /* links and accent text on light surfaces */
+  --color-ruby: #ea2261;
+  --color-amber: #ffb347;
 
-  --font-sans: var(--font-body), system-ui, sans-serif;
-  --font-display: var(--font-heading), var(--font-body), system-ui, sans-serif;
+  --font-sans: var(--font-body), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: var(--font-body), system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: var(--font-code), ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  /* Flat, square design language: every radius token resolves to zero. */
-  --radius-xs: 0;
-  --radius-sm: 0;
-  --radius-md: 0;
-  --radius-lg: 0;
-  --radius-xl: 0;
-  --radius-2xl: 0;
-  --radius-3xl: 0;
-  --radius-4xl: 0;
+  --radius-xs: 2px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 8px;
+  --radius-2xl: 8px;
+
+  /* Elevation: blue-tinted far layer plus neutral near layer */
+  --shadow-ambient: 0 3px 6px rgba(23, 23, 23, 0.06);
+  --shadow-card: 0 15px 35px rgba(23, 23, 23, 0.08);
+  --shadow-elevated: 0 30px 45px -30px rgba(50, 50, 93, 0.25), 0 18px 36px -18px rgba(0, 0, 0, 0.1);
+  --shadow-deep: 0 14px 21px -14px rgba(3, 3, 39, 0.25), 0 8px 17px -8px rgba(0, 0, 0, 0.1);
 }
 
 @layer base {
@@ -43,22 +62,27 @@
 
   body {
     background: #ffffff;
-    color: var(--color-charcoal-800);
+    color: var(--color-steel-500);
     font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.55;
+    font-weight: 400;
     -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
   }
 
   h1,
   h2,
   h3,
   h4 {
-    font-family: var(--font-display);
-    letter-spacing: -0.01em;
+    color: var(--color-navy-950);
+    font-weight: 300;
   }
 
   :focus-visible {
-    outline: 3px solid var(--color-accent);
+    outline: 2px solid var(--color-accent);
     outline-offset: 2px;
+    border-radius: 2px;
   }
 
   ::selection {
@@ -70,5 +94,64 @@
     html {
       scroll-behavior: auto;
     }
+    * {
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Display type: weight 300, tracking tightens as size grows */
+  .t-display {
+    font-size: clamp(2.25rem, 1.45rem + 3.6vw, 3.5rem);
+    line-height: 1.04;
+    letter-spacing: -0.025em;
+    font-weight: 300;
+  }
+  .t-h1 {
+    font-size: clamp(2rem, 1.4rem + 2.4vw, 3rem);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    font-weight: 300;
+  }
+  .t-h2 {
+    font-size: clamp(1.625rem, 1.3rem + 1.1vw, 2.125rem);
+    line-height: 1.12;
+    letter-spacing: -0.02em;
+    font-weight: 300;
+  }
+  .t-h3 {
+    font-size: 1.375rem;
+    line-height: 1.2;
+    letter-spacing: -0.012em;
+    font-weight: 300;
+  }
+  .t-h4 {
+    font-size: 1.0625rem;
+    line-height: 1.3;
+    letter-spacing: -0.005em;
+    font-weight: 500;
+  }
+  .t-lead {
+    font-size: 1.125rem;
+    line-height: 1.55;
+    font-weight: 300;
+  }
+  /* Technical label: monospace, uppercase, small */
+  .t-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    line-height: 1.4;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .tnum {
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Decorative warm gradient used only for hero art and accent rules */
+  .bg-brand-gradient {
+    background-image: linear-gradient(120deg, var(--color-amber) 0%, var(--color-accent) 48%, var(--color-ruby) 100%);
   }
 }
